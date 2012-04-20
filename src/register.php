@@ -1,5 +1,5 @@
 <?php
-	include("../lib/global.php")
+	include("../lib/global.php");
 ?>
 <!DOCTYPE html>
 <html >

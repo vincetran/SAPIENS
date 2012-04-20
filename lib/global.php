@@ -13,6 +13,10 @@ function getCPSDropDown(){
 	}
 }
 
+/******************************
+	User related functions
+******************************/
+
 function register($user, $pass, $fname, $lname, $email, $pnumber, $cps){
 	$db = connectDb();
 	$sql = "SELECT user_id FROM users WHERE user_login_name=?";
@@ -56,6 +60,50 @@ function register($user, $pass, $fname, $lname, $email, $pnumber, $cps){
 			echo "Cps: ".$cps."\n";
 			echo "PNumber: ".$pnumber.$cpt."\n";
 		}
+	}
+}
+
+function cookieExists(){
+	if(isset($_COOKIE['ID_a3']))
+	{
+		return TRUE;
+	}
+	else
+	{
+		return FALSE;
+	}
+}
+
+function validCookie(){
+	$username = $_COOKIE['ID_SAPIENS']; 
+	if (checkUser($username)) {
+		return TRUE;
+	}
+	else{
+		return FALSE;
+	}
+}
+
+function checkUser($username)
+{
+	$db = connectDb();
+	$stmt = $db->prepare("SELECT user_id FROM users WHERE username=?");
+	$stmt->bind_param('s', $username);
+	$stmt->execute();
+	if($stmt->fetch())
+	{
+		$db->close();
+		return TRUE;
+	}
+	else
+	{
+		return FALSE;
+	}
+}
+
+function isAuthenticated(){
+	if(cookieExists() && validCookie()){
+		return TRUE;
 	}
 }
 
