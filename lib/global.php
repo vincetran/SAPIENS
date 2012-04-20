@@ -33,12 +33,14 @@ function register($user, $pass, $fname, $lname, $email, $pnumber, $cps){
 		$stmt->execute();
 		$stmt->bind_result($cpt);
 		$stmt->fetch();
+
+		$stmt->close();
 		
 		$sql = "INSERT INTO users(user_firstname, user_lastname, user_login_name, user_login_pass, user_email, user_cell_phone, user_cell_provider, user_cell_email) VALUES(?,?,?,?,?,?,?,?)";
 		if($stmt = $db->prepare($sql))
 		{
-			//$stmt2->bind_param('ssssssis', $fname, $lname, $user, $pass, $email, $pnumber, $cps, $pnumber.$cpt);
-			$stmt->bind_param('ssssssis', 'vincent', 'tran', 'vince', 'lol', 'freedom1378@gmail.com', '2152005593', 2, '2152005594@txt.att.net');
+			$phone_email = $pnumber.$cpt;
+			$stmt->bind_param('ssssssis', $fname, $lname, $user, $pass, $email, $pnumber, $cps, $phone_email);
 			$stmt->execute();
 			$db->close();
 			setcookie('ID_SAPIENS', $user, time()+3600);
