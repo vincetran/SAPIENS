@@ -40,4 +40,23 @@ function register($user, $pass, $fname, $lname, $email, $cps){
 	}
 }
 
+function login($user, $pass){
+	$db = connectDb();
+	$sql = "SELECT user_id FROM users WHERE user_login_name=? and user_login_pass=?";
+	$stmt = $db->prepare($sql);
+	$stmt->bind_param('ss', $user, $pass);
+	$stmt->execute();
+	if($stmt->fetch())
+	{
+		setcookie('ID_a3', $user, time()+3600);
+		$db->close();
+		return 1;
+	}
+	else
+	{
+		$db->close();
+		return -1;
+	}
+}
+
 ?>
