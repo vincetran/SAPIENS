@@ -1,7 +1,4 @@
 <?php
-	if($_POST && $_POST['cps']){
-		echo $_POST['cps'];	
-	}
 	include("../lib/global.php")
 ?>
 <!DOCTYPE html>
