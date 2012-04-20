@@ -1,3 +1,8 @@
+<?php
+	if($_POST && $_POST['choice']){
+		echo $_POST['choice'];	
+	}
+?>
 <!DOCTYPE html>
 <html >
 <head>
@@ -9,18 +14,19 @@
 <div id ="title">SAPI<span style="color:#4CE11C;">ENS</span></div>
 <div id="container">
 <div class="register">
-	<form action="newuser.php" method="post">
+	<form action="register.php" method="post">
 		<label for="username">Username*</label><input type="text" name="username"></br>
 		<label for="password">Password*</label><input type="password" name="password"></br>
 		<label for="email">Email*</label><input type="text" name="email"></br>
 		<label for="fname">First Name</label><input type="text" name="fName"></br>
 		<label for="lname">Last Name</label><input type="text" name="lName"></br>
-		<label for="lname">Cell Phone Provider</label><select >
-		  <option value="volvo">Volvo</option>
+		<label for="lname">Cell Phone Provider</label>
+		<div><select name="choice" >
+		  <option value="1">Verizon Wireless</option>
 		  <option value="saab">Saab</option>
 		  <option value="mercedes">Mercedes</option>
 		  <option value="audi">Audi</option>
-		</select></br>
+		</select></div></br>
 		<input type="submit" name="register" value="Register">
 	</form>
 </div>

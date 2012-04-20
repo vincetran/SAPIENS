@@ -53,8 +53,13 @@ label{
 	color: #232323;
 }
 select{
+	font-family: "Chewy";
+    color: #625656;
 	padding: 5px;
+	width: 190px;
+
+	position:relative;
+	left: 5px;
 	display: block;
-	margin: auto;
 	text-align: center;
 }
