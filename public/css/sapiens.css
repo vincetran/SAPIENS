@@ -1,0 +1,60 @@
+@font-face {
+    font-family: 'TriplexBold';
+    src: url('triplex-bold-webfont.eot');
+    src: url('Triplex-Bold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+body{
+
+	margin: 0px;
+	padding: 0px;
+}
+.register{
+    padding: 30px;
+    width:200px;
+    margin: auto;
+ }
+    
+.register input{
+    font-size: 15px;
+    padding: 5px;
+    border: 1px solid #A7A7A7;
+    border-radius: 4px;
+
+}
+label{
+    font-size: 15px;
+    font-family: "TriplexBold";
+    color: #625656;
+    clear: all;
+    display: block;
+    position: relative;
+    left: -5px;
+    text-align: left;
+    padding: 10px;
+
+    }
+#container{
+	text-align:center;
+	background-color: #E7E7E7;
+	border-top: 1px solid #BFBFBF;
+	border-bottom: 1px solid #BFBFBF;
+	margin-top: 30px;
+}
+#title{
+	position: relative;
+    font-family:'Chewy', cursive;
+	font-size: 100px;
+	left: 50px;
+	top: 20px;
+	color: #232323;
+}
+select{
+	padding: 5px;
+	display: block;
+	margin: auto;
+	text-align: center;
+}
