@@ -1,13 +1,14 @@
 <?php
-	if($_POST && $_POST['choice']){
-		echo $_POST['choice'];	
+	if($_POST && $_POST['cps']){
+		echo $_POST['cps'];	
 	}
+	include("../lib/global.php")
 ?>
 <!DOCTYPE html>
 <html >
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Assignment 3</title>
+<title>SAPIENS</title>
 <link rel="stylesheet" type="text/css" href="../public/css/sapiens.css" />
 <link href='http://fonts.googleapis.com/css?family=Chewy' rel='stylesheet' type='text/css'></head>
 <body>
@@ -21,11 +22,8 @@
 		<label for="fname">First Name</label><input type="text" name="fName"></br>
 		<label for="lname">Last Name</label><input type="text" name="lName"></br>
 		<label for="lname">Cell Phone Provider</label>
-		<div><select name="choice" >
-		  <option value="1">Verizon Wireless</option>
-		  <option value="saab">Saab</option>
-		  <option value="mercedes">Mercedes</option>
-		  <option value="audi">Audi</option>
+		<div><select name="cps" >
+			<?php getCPSDropDown(); ?>
 		</select></div></br>
 		<input type="submit" name="register" value="Register">
 	</form>
