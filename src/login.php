@@ -2,7 +2,6 @@
 	include("../lib/global.php");
 	if($_POST && $_POST['username'] && $_POST['password']){
 		$result = login($_POST['username'], $_POST['password']);
-		echo "login: " . $result;
 	}
 ?>
 <!DOCTYPE html>
@@ -19,7 +18,12 @@
 	<form action="login.php" method="post">
 		<label for="username">Username</label><input type="text" name="username"></br>
 		<label for="password">Password</label><input type="password" name="password"></br>
-		<input type="submit" name="login" value="login">
+		<input type="submit" name="login" value="login"></br>
+		<?php
+		if(isset($result) && $result == 1)
+		echo "Login Failed.";
+		?>
+		<a href="sapiens.php">Register</a>
 	</form>
 </div>
 </div>
