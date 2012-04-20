@@ -21,10 +21,20 @@
 		<label for="email">Email*</label><input type="text" name="email"></br>
 		<label for="fname">First Name</label><input type="text" name="fName"></br>
 		<label for="lname">Last Name</label><input type="text" name="lName"></br>
-		<label for="lname">Cell Phone Provider</label>
+		<label for="pnumber">Phone Number</label><input type="text" name="pNumber"></br>
+		<label for="provider">Cell Phone Provider</label>
 		<div><select name="cps" >
 			<?php getCPSDropDown(); ?>
 		</select></div></br>
+		<?php
+			if(isset($_POST['register']))
+			{
+				if(register($_POST['username'], $_POST['password'], $_POST['fName'], $_POST['lName'], $_POST['email'], $_POST['pNumber'], $_POST['cps']) == -1)
+				{
+					echo "<p class=\"error\">Username already exists. Please choose a new username.</p>";
+				}
+			}
+		?>
 		<input type="submit" name="register" value="Register">
 	</form>
 </div>
