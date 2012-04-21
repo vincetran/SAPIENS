@@ -23,6 +23,13 @@ class User{
 	public function subscribe($location){
 		// TODO: Send database the subscription information for le location
 	}
+	/*
+	BELOW THIS LINE IS WAYS TO CREATE THE USER OBJECT~~~~~~~~~~~~~~~~~~~~~~~
+	*/
+	//@Return: Will return a user object.
+	public static function login(){
+
+	}
 }
 
 ?>
