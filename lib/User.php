@@ -26,8 +26,7 @@ class User{
 	public function subscribe($location){
 		// TODO: Send database the subscription information for le location
 	}
-
-
+	
 	/*
 	///////////////////////////////////////////////////////////////////////////////////////////
 	BELOW THIS LINE IS WAYS TO CREATE THE USER OBJECT~~~~~~~~~~~~~~~~~~~~~~~
@@ -118,7 +117,7 @@ class User{
 	}
 
 	public static function resume(){
-		if($_COOKIE && $_COOKIE['ID_SAPIENS'] && User::checkUser($_COOKIE['ID_SAPIENS'])){
+		if($_COOKIE && isset($_COOKIE['ID_SAPIENS']) && User::checkUser($_COOKIE['ID_SAPIENS'])){
 			return new User($_COOKIE['ID_SAPIENS']);
 		}
 		else{
