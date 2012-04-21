@@ -1,70 +1,73 @@
 <?php
 require_once("../db/db.php");
 /*
-How to get an Event Object:
-	
+How to get a Subscription Object:
+	Subscription::subscribe($user_id, $loc_id, $min_severity_web, $min_severity_email, $min_severity_text);
 Interface:
 
 */
-class Event{
-	public $loc_id, $severity, $description;
-	private function __construct($loc_id, $severity, $description){
+class Subscription{
+	public $user_id, $loc_id, $min_severity_web, $min_severity_email, $min_severity_text;
+	private function __construct($user_id, $loc_id, $min_severity_web, $min_severity_email, $min_severity_text){
+		$this->user_id = $user_id;
 		$this->loc_id = $loc_id;
-		$this->severity = $severity;
-		$this->description = $description;
+		$this->min_severity_web = $min_severity_web;
+		$this->min_severity_email = $min_severity_email;
+		$this->min_severity_text = $min_severity_text;
 	}
-	public function getSubscriptions($subscription){
-		//TODO: Use loc_id to match subscriptions for users with a subscription for that location
-	}
-	public function getDynamicSubscriptions($user){
-		//TODO: Use last_loc_id of user and last_loc_checkin_ts of user to dynamically match relevant subscriptions
-	}
-	
 	/*
 	///////////////////////////////////////////////////////////////////////////////////////////
-	BELOW THIS LINE IS WAYS TO CREATE THE EVENT OBJECT~~~~~~~~~~~~~~~~~~~~~~~
+	BELOW THIS LINE IS WAYS TO CREATE THE SUBSCRIPTION OBJECT~~~~~~~~~~~~~~~~~~~~~~~
 	///////////////////////////////////////////////////////////////////////////////////////////
 	*/
 	
 	/*
-		FUNCTION: createEvent
-		Params: loc_id  -- used to check for relevant subscriptions and to make dynamic subscriptions
-				severity -- defcon X
-				description -- de·scrip·tion/di'skripSH?n/ Noun: A spoken or written representation or account of a person, object, or event: "people who had seen him were able to give a description".
-		Return: Event (onSuccess)
-				-1 (on invalid location)
-				-2 (on invalid severity)
-				-3 (on improperly formatted description)
+		FUNCTION: subscribe
+		Params: user_id  -- used to assign subscription to a user
+				loc_id -- user to mark subscription for ENS events from location
+				min_severity_web -- the minimum severity an event must have before contacting via this method
+				min_severity_email -- the minimum severity an event must have before contacting via this method
+				min_severity_text -- the minimum severity an event must have before contacting via this method
+		Return: Subscription (onSuccess)
+				-1 (on invalid user)
+				-2 (on invalid location)
+				-3 (on invalid severity)
 	*/
-	public static function createEvent($loc_id, $severity, $description){
+	public static function subscribe($user_id, $loc_id, $min_severity_web, $min_severity_email, $min_severity_text){
 		$db = connectDb();
-		$sql = "SELECT loc_name FROM locations WHERE loc_id=?";
+		$sql = "SELECT user_login_name FROM user WHERE user_id=?";
 		$stmt = $db->prepare($sql);
-		$stmt->bind_param('i', $loc_id);
+		$stmt->bind_param('i', $user_id);
 		$stmt->execute();
 		if($stmt->fetch())
 		{
 			$stmt->close();
-			if(is_numeric($severity) && $severity >= 1 && $severity <= 3){
-				if(is_string($description) && (strlen($description) < 121)){
-					$sql = "INSERT INTO events(loc_id, event_severity, event_description) VALUES(?,?,?)";
+			$sql = "SELECT loc_name FROM locations WHERE loc_id=?";
+			$stmt = $db->prepare($sql);
+			$stmt->bind_param('i', $loc_id);
+			$stmt->execute();
+			if($stmt->fetch())
+			{
+				$stmt->close();
+				if(is_numeric($severity) && $severity >= 1 && $severity <= 3){
+					$sql = "INSERT INTO subscriptions(user_id, loc_id, min_severity_web, min_severity_email, min_severity_text) VALUES(?,?,?)";
 					$stmt = $db->prepare($sql);
-					$stmt->bind_param('iis', $loc_id, $severity, $description);
+					$stmt->bind_param('iiiii', $user_id, $loc_id, $min_severity_web, $min_severity_email, $min_severity_text);
 					$stmt->execute();
 					$db->close();
-					return new Event($loc_id, $severity, $description);
+					return new Subscription($user_id, $loc_id, $min_severity_web, $min_severity_email, $min_severity_text);
 				}
 				else{
 					return -3;
 				}
 			}
-			else{
+			else
+			{
+				$db->close();
 				return -2;
 			}
 		}
-		else
-		{
-			$db->close();
+		else{
 			return -1;
 		}
 	}
