@@ -2,11 +2,9 @@
 require_once("../db/db.php");
 /*
 How to get an Event Object:
-	Event::createEvent($loc_id, $severity, $description);
 	
 Interface:
-	$event.getSubscriptions(Subscription obj);
-	$event.getDynamicSubscriptions(User obj);
+
 */
 class Event{
 	public $loc_id, $severity, $description;
