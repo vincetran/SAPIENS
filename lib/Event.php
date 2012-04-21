@@ -7,9 +7,11 @@ Interface:
 
 */
 class Event{
-	public $loc_id, $severity, $ts, $description;
+	public $loc_id, $severity, $description;
 	private function __construct($loc_id, $severity, $description){
-	
+		$this->loc_id = $loc_id;
+		$this->severity = $severity;
+		$this->description = $description;
 	}
 	public function getSubscriptions($subscription){
 		//TODO: Use loc_id to match subscriptions for users with a subscription for that location
@@ -51,6 +53,9 @@ class Event{
 					$stmt->execute();
 					$db->close();
 					return new Event($loc_id, $severity, $description);
+				}
+				else{
+					return -3;
 				}
 			}
 			else{
