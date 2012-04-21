@@ -1,1 +1,1 @@
-Success!
+Successful login

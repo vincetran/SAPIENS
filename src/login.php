@@ -1,8 +1,12 @@
 <?php
-	include("../lib/global.php");
+	require_once("../lib/global.php");
+	require_once("../lib/User.php");
+	if(User::resume() != -1){
+		header('Location: test.php');
+	}
 	if($_POST && $_POST['username'] && $_POST['password']){
-		$result = login($_POST['username'], $_POST['password']);
-		if(isAuthenticated()){
+		$result = User::login($_POST['username'], $_POST['password']);
+		if($result != -1 || $result != -2){
 			header('Location: test.php');
 		}
 	}

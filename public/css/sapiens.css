@@ -63,3 +63,7 @@ select{
 	display: block;
 	text-align: center;
 }
+.wrong{
+    color:#D52309;
+    font-family: 'Chau Philomene One', sans-serif;
+}

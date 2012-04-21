@@ -1,4 +1,5 @@
 <?php
+require_once("../db/db.php");
 /*
 How to get a User Object:
 	User::login(username, password);
@@ -12,7 +13,7 @@ Interface:
 */
 class User{
 	//Doesn't do validation, leave that to user object creation
-	public $username, $first, $last, $email, $phone, $provider
+	public $username, $first, $last, $email, $phone, $provider;
 	private function __construct($username){
 
 	}
@@ -71,7 +72,7 @@ class User{
 				$stmt->execute();
 				$db->close();
 				setcookie('ID_SAPIENS', $user, time()+3600);
-				return User($user);
+				return new User($user);
 			}
 			else
 			{
@@ -117,7 +118,7 @@ class User{
 	}
 
 	public static function resume(){
-		if($_COOKIE['ID_SAPIENS'] && User::checkUser($_COOKIE['ID_SAPIENS'])){
+		if($_COOKIE && $_COOKIE['ID_SAPIENS'] && User::checkUser($_COOKIE['ID_SAPIENS'])){
 			return new User($_COOKIE['ID_SAPIENS']);
 		}
 		else{

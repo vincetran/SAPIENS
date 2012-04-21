@@ -1,5 +1,5 @@
 <?php
-include("../db/db.php");
+require("../db/db.php");
 
 function getCPSDropDown(){
 	$db = connectDb();
