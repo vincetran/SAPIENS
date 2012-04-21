@@ -64,7 +64,7 @@ function register($user, $pass, $fname, $lname, $email, $pnumber, $cps){
 }
 
 function cookieExists(){
-	if(isset($_COOKIE['ID_a3']))
+	if(isset($_COOKIE['ID_SAPIENS']))
 	{
 		return TRUE;
 	}
@@ -87,7 +87,7 @@ function validCookie(){
 function checkUser($username)
 {
 	$db = connectDb();
-	$stmt = $db->prepare("SELECT user_id FROM users WHERE username=?");
+	$stmt = $db->prepare("SELECT user_id FROM users WHERE user_login_name=?");
 	$stmt->bind_param('s', $username);
 	$stmt->execute();
 	if($stmt->fetch())
@@ -105,6 +105,9 @@ function isAuthenticated(){
 	if(cookieExists() && validCookie()){
 		return TRUE;
 	}
+	else{
+		return FALSE;
+	}
 }
 
 function login($user, $pass){
@@ -115,7 +118,7 @@ function login($user, $pass){
 	$stmt->execute();
 	if($stmt->fetch())
 	{
-		setcookie('ID_a3', $user, time()+3600);
+		setcookie('ID_SAPIENS', $user, time()+3600);
 		$db->close();
 		return 1;
 	}
@@ -124,6 +127,11 @@ function login($user, $pass){
 		$db->close();
 		return -1;
 	}
+}
+
+function logout($user){
+	setcookie('ID_SAPIENS', $user, time()-3600);
+	return 1;
 }
 
 ?>
