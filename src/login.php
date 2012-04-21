@@ -2,6 +2,9 @@
 	include("../lib/global.php");
 	if($_POST && $_POST['username'] && $_POST['password']){
 		$result = login($_POST['username'], $_POST['password']);
+		if(isAuthenticated()){
+			header('Location: test.php');
+		}
 	}
 ?>
 <!DOCTYPE html>
@@ -20,10 +23,10 @@
 		<label for="password">Password</label><input type="password" name="password"></br>
 		<input type="submit" name="login" value="login"></br>
 		<?php
-		if(isset($result) && $result == 1)
-		echo "Login Failed.";
+		if(isset($result) && $result!=1)
+			echo "Login Failed.";
 		?>
-		<a href="sapiens.php">Register</a>
+		</br><a href="register.php">Register</a> <a href="index.php">Logout</a>
 	</form>
 </div>
 </div>
