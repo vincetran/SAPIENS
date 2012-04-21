@@ -1,6 +1,9 @@
 <?php
 	require_once('../lib/global.php');
 	require_once("../lib/User.php");
+	if(User::resume()){
+		header('Location: test.php');
+	}
 	$submitted = isset($_POST['register']) && isset($_POST['username']) && isset($_POST['password']) && isset($_POST['email']); // Check to see if the form is submitted.
 	$wrongField = false;
 	if($submitted){

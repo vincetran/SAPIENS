@@ -121,7 +121,7 @@ class User{
 			return new User($_COOKIE['ID_SAPIENS']);
 		}
 		else{
-			return -1;
+			return null;
 		}
 	}
 

@@ -1,7 +1,7 @@
 <?php
 	require_once("../lib/global.php");
 	require_once("../lib/User.php");
-	if(User::resume() != -1){
+	if(User::resume()){
 		header('Location: test.php');
 	}
 	if($_POST && $_POST['username'] && $_POST['password']){
