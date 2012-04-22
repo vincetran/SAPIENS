@@ -21,7 +21,7 @@
 	<a href="new_event.php">Submit a New Event</a>
 	<a href="logout.php">Logout</a>
 </div>
-<img src="http://sdakotabirds.com/species_photos/photos/broad_billed_hummingbird_1.jpg" />
+</br><img src="../images/placeholder.png" class="shadow"/>
 </div>
 </div>
 </body>

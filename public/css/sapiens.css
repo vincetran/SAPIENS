@@ -108,3 +108,9 @@ select{
     border: 1px solid #9F0735;
     height: 25px;
 }
+.shadow{
+  -moz-box-shadow:    3px 3px 5px 6px #ccc;
+  -webkit-box-shadow: 3px 3px 5px 6px #ccc;
+  box-shadow:         3px 3px 5px 6px #ccc;
+  margin: 10px;
+}
