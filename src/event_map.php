@@ -72,6 +72,15 @@ if(!User::resume()){
 
   <div id ="title">SAPI<span style="color:#4CE11C;">ENS</span></div>
   <div id="container"> 
+  <div id="navbar">
+    <a href="event_list.php">Event List</a>
+    <a href="event_map.php">Event Map</a>
+    <a href="subscriptions.php">Subscriptions</a>
+    <a href="checkin.php">Check In</a>
+    <a href="new_event.php">Submit a New Event</a>
+    <a href="logout.php">Logout</a>
+  </div>
+
     <div id="map_canvas" style="width:100%; height:400px; margin: auto; margin-top: 20px; margin-bottom: 20px; border: 1px solid #CBC9C9;"></div>            
   </div>                
 </body>
