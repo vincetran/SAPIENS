@@ -13,10 +13,4 @@ function getCPSDropDown(){
 	}
 }
 
-/******************************
-	User related functions
-******************************/
-
-
-
 ?>

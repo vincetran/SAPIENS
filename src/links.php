@@ -9,6 +9,7 @@
 <body>
 <div id ="title">SAPI<span style="color:#4CE11C;">ENS</span></div>
 <div id="container">
+<div id="navbar"></div>
 <div class="links">
 	<h1>Links of Interest</h1>
 	<p><a href="event_list.php">Event List</a></p>
