@@ -112,7 +112,7 @@ input{
     background: -ms-linear-gradient(top,  #565656 0%,#232323 100%); /* IE10+ */
     background: linear-gradient(top,  #565656 0%,#232323 100%); /* W3C */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#565656', endColorstr='#232323',GradientType=0 ); /* IE6-9 */
-    -webkit-transition: color .5s;
+    
 
 }
 
@@ -122,6 +122,10 @@ input{
     margin: 10px;
     padding: 10px;
     padding-left: 20px;
+    -webkit-transition: color .5s;
+}
+#navbar a:hover{
+    color:#2FEA22;
 }
 .error{
     color:#D52309;
