@@ -13,6 +13,8 @@ if(!User::resume()){
 	<link rel="stylesheet" type="text/css" href="../public/css/sapiens.css" />
 	<link href='http://fonts.googleapis.com/css?family=Chau+Philomene+One' rel='stylesheet' type='text/css'>
 	<link href='http://fonts.googleapis.com/css?family=Chewy' rel='stylesheet' type='text/css'>
+   <link href='http://fonts.googleapis.com/css?family=Reenie+Beanie' rel='stylesheet' type='text/css'>
+
     <title>Map..</title>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>

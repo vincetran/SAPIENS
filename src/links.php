@@ -3,9 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>SAPIENS - Home</title>
-<link rel="stylesheet" type="text/css" href="../public/css/sapiens.css" />
+<link rel="stylesheet" type="text/css" href="../public/css/sapiens.css?1232" />
 <link href='http://fonts.googleapis.com/css?family=Chewy' rel='stylesheet' type='text/css'>
-<link href='http://fonts.googleapis.com/css?family=Chau+Philomene+One' rel='stylesheet' type='text/css'></head>
+<link href='http://fonts.googleapis.com/css?family=Chau+Philomene+One' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Reenie+Beanie' rel='stylesheet' type='text/css'>
+</head>
+
 <body>
 <div id ="title">SAPI<span style="color:#4CE11C;">ENS</span></div>
 
@@ -18,11 +21,7 @@
 	<a href="new_event.php">Submit a New Event</a>
 	<a href="logout.php">Logout</a>
 </div>
-
-
-</div>
-<div class="links">
-
+<img src="http://sdakotabirds.com/species_photos/photos/broad_billed_hummingbird_1.jpg" />
 </div>
 </div>
 </body>
