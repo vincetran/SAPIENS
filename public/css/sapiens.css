@@ -10,12 +10,9 @@ a{
     font-size:20px;
     font-family: "TriplexBold";
     color: white;
-    -webkit-transition: color .5s;
 
 }
-a:hover{
-    color:#50EB44;
-}
+
 h1{
     color:#259700;
     font-size:35px;
@@ -81,8 +78,9 @@ label{
     background: -ms-linear-gradient(top,  #565656 0%,#232323 100%); /* IE10+ */
     background: linear-gradient(top,  #565656 0%,#232323 100%); /* W3C */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#565656', endColorstr='#232323',GradientType=0 ); /* IE6-9 */
-    
+    -webkit-transition: color .5s;
 }
+
 #navbar a{
     font-family: 'Reenie Beanie', cursive;
     font-size: 25px;
