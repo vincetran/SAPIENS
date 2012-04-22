@@ -16,6 +16,39 @@
 <link href='http://fonts.googleapis.com/css?family=Chau+Philomene+One' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=Reenie+Beanie' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
+<script>
+	$(function() {
+		var availableTags = [
+			"ActionScript",
+			"AppleScript",
+			"Asp",
+			"BASIC",
+			"C",
+			"C++",
+			"Clojure",
+			"COBOL",
+			"ColdFusion",
+			"Erlang",
+			"Fortran",
+			"Groovy",
+			"Haskell",
+			"Java",
+			"JavaScript",
+			"Lisp",
+			"Perl",
+			"PHP",
+			"Python",
+			"Ruby",
+			"Scala",
+			"Scheme"
+		];
+		$( "#tags" ).autocomplete({
+			source: availableTags
+		});
+	});
+</script>
 </head>
 
 <body>
@@ -35,8 +68,10 @@
 		<h1>Current Subscriptions</h1>
 		<h1>Add a Subscription</h1>
 		<form action="subscriptions.php" method="post">
+			<div class="ui-widget">
 			<label for="loc">Location</label></br>
-			<input type="text" name="loc" size="30"></br></br>
+			<input type="text" name="loc" size="30" id="tags"></br></br>
+			</div>
 
 			<label for="severity">Severity Levels</label></br></br>
 
@@ -61,7 +96,7 @@
 			</select>
 			</div>
 			
-			
+
 			</br></br><input type="submit" name="subscribe" value="Subscribe to Location"></br>
 		</form>
 	</div>
