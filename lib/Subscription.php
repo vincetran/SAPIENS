@@ -7,14 +7,27 @@ Interface:
 
 */
 class Subscription{
-	public $user_id, $loc_id, $min_severity_web, $min_severity_email, $min_severity_text;
-	private function __construct($user_id, $loc_id, $min_severity_web, $min_severity_email, $min_severity_text){
-		$this->user_id = $user_id;
-		$this->loc_id = $loc_id;
-		$this->min_severity_web = $min_severity_web;
-		$this->min_severity_email = $min_severity_email;
-		$this->min_severity_text = $min_severity_text;
+	private $userIds, $locationId;
+
+	private function __construct($location){
+
 	}
+
+	public function notify($num){
+
+	}
+
+	public function add($user, $webLevel, $emailLevel, $txtLevel){
+
+	}
+
+	public function check($user){
+		
+	}
+	public function remove($user){
+
+	}
+
 	/*
 	///////////////////////////////////////////////////////////////////////////////////////////
 	BELOW THIS LINE IS WAYS TO CREATE THE SUBSCRIPTION OBJECT~~~~~~~~~~~~~~~~~~~~~~~

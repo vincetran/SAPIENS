@@ -8,18 +8,17 @@ Interface:
 	$event.getSubscriptions(Subscription obj);
 	$event.getDynamicSubscriptions(User obj);
 */
-class Event{
-	public $loc_id, $severity, $description;
-	private function __construct($loc_id, $severity, $description){
-		$this->loc_id = $loc_id;
-		$this->severity = $severity;
-		$this->description = $description;
+class EventManager{
+	public function __construct($user){
+		
 	}
-	public function getSubscriptions($subscription){
-		//TODO: Use loc_id to match subscriptions for users with a subscription for that location
+
+	public function getFullList(){
+
 	}
-	public function getDynamicSubscriptions($user){
-		//TODO: Use last_loc_id of user and last_loc_checkin_ts of user to dynamically match relevant subscriptions
+
+	public function getList(){
+		
 	}
 	
 	/*
@@ -54,7 +53,8 @@ class Event{
 					$stmt->bind_param('iis', $loc_id, $severity, $description);
 					$stmt->execute();
 					$db->close();
-					return new Event($loc_id, $severity, $description);
+					return 1;
+					//return new Event($loc_id, $severity, $description);
 				}
 				else{
 					return -3;

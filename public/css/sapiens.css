@@ -4,29 +4,43 @@
     src: url('Triplex-Bold.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
-
 }
-
+a{
+    text-decoration:none;
+    color:#0f3f00;
+    font-size:20px;
+    font-family: "TriplexBold";
+}
+a:hover{
+    text-decoration:underline;
+}
+h1{
+    color:#259700;
+    font-size:35px;
+    font-family: "TriplexBold";
+}
 body{
-
 	margin: 0px;
 	padding: 0px;
 }
-.register{
+.links{
+    padding:10px;
+    width:400px;
+    margin: auto;
+ }
+ .register{
     padding: 30px;
     width:200px;
     margin: auto;
  }
-    
 .register input{
     font-size: 15px;
     padding: 5px;
     border: 1px solid #A7A7A7;
     border-radius: 4px;
-
 }
 label{
-    font-size: 15px;
+    font-size: 18px;
     font-family: "TriplexBold";
     color: #625656;
     clear: all;
@@ -35,8 +49,7 @@ label{
     left: -5px;
     text-align: left;
     padding: 10px;
-
-    }
+}
 #container{
 	text-align:center;
 	background-color: #E7E7E7;
@@ -57,13 +70,19 @@ select{
     color: #625656;
 	padding: 5px;
 	width: 190px;
-
 	position:relative;
 	left: 5px;
 	display: block;
 	text-align: center;
 }
-.wrong{
+.error{
     color:#D52309;
     font-family: 'Chau Philomene One', sans-serif;
+    text-align:center;
+    vertical-align:center;
+    padding: 5px 0px 5px 0px;
+    margin: 5%;
+    background-color: #ffd2e0;
+    border: 1px solid #9F0735;
+    height: 25px;
 }

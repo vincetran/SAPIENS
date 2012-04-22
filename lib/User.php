@@ -99,18 +99,29 @@ class User{
 	*/
 	public static function login($user, $pass){
 		$db = connectDb();
-		$sql = "SELECT user_id FROM users WHERE user_login_name=? and user_login_pass=?";
+		$sql = "SELECT user_id FROM users WHERE user_login_name=?";
 		$stmt = $db->prepare($sql);
-		$stmt->bind_param('ss', $user, $pass);
+		$stmt->bind_param('s', $user);
 		$stmt->execute();
-		if($stmt->fetch())
-		{
-			setcookie('ID_SAPIENS', $user, time()+3600);
-			$db->close();
-			return new User($user);
+		if($stmt->fetch()){
+			$stmt->close();
+			$sql = "SELECT user_id FROM users WHERE user_login_name=? and user_login_pass=?";
+			$stmt = $db->prepare($sql);
+			$stmt->bind_param('ss', $user, $pass);
+			$stmt->execute();
+			if($stmt->fetch())
+			{
+				setcookie('ID_SAPIENS', $user, time()+3600);
+				$db->close();
+				return new User($user);
+			}
+			else
+			{
+				$db->close();
+				return -2;
+			}
 		}
-		else
-		{
+		else{
 			$db->close();
 			return -1;
 		}
@@ -124,7 +135,6 @@ class User{
 			return null;
 		}
 	}
-
 
 	/*
 		FUNCTION: checkUser
@@ -146,6 +156,11 @@ class User{
 			$db->close();
 			return FALSE;
 		}
+	}
+
+	public function logout(){
+		setcookie('ID_SAPIENS', $username, time()-3600);
+		return 1;
 	}
 }
 

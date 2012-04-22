@@ -18,9 +18,5 @@ function getCPSDropDown(){
 ******************************/
 
 
-function logout($user){
-	setcookie('ID_SAPIENS', $user, time()-3600);
-	return 1;
-}
 
 ?>
