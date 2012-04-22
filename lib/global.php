@@ -12,5 +12,9 @@ function getCPSDropDown(){
 		echo "\t<option value=\"".$cp_id."\">".$cp_name."</option>\n";
 	}
 }
-
+function severityDropDown(){
+	for($i=1; $i<5; $i++){
+		echo "\t<option value=\"".$i."\">".$i."</option>\n";
+	}
+}
 ?>
