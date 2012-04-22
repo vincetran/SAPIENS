@@ -7,12 +7,14 @@
 }
 a{
     text-decoration:none;
-    color:#0f3f00;
     font-size:20px;
     font-family: "TriplexBold";
+    color: white;
+    -webkit-transition: color .5s;
+
 }
 a:hover{
-    text-decoration:underline;
+    color:#50EB44;
 }
 h1{
     color:#259700;
@@ -63,8 +65,10 @@ label{
 	font-size: 80px;
 	left: 50px;
 	top: 5px;
-	color: #232323;
+	color: rgba(0,0,0,1);
+    padding-left: 0px;
 }
+
 #navbar{
     width:100%;
     padding:5px;
@@ -85,7 +89,6 @@ label{
     margin: 10px;
     padding: 10px;
     padding-left: 20px;
-    color: white;
 }
 select{
 	font-family: "Chewy";
@@ -97,6 +100,7 @@ select{
 	display: block;
 	text-align: center;
 }
+
 .error{
     color:#D52309;
     font-family: 'Chau Philomene One', sans-serif;
@@ -114,3 +118,18 @@ select{
   box-shadow:         3px 3px 5px 6px #ccc;
   margin: 10px;
 }
+
+::-webkit-scrollbar {
+    background: transparent;
+    border-radius:4px;
+}
+::-webkit-scrollbar-thumb{
+    background-color: rgba(255,255,255,1);
+    border: solid white 6px;
+    -webkit-border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover{
+    background-color: rgba(0,0,0,.6);
+    -webkit-border-radius: 50px;
+}​
