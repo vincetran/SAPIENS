@@ -58,6 +58,7 @@ if(!User::resume()){
             infowindow.open(map,marker);
         });   
     }
+    
     function placeEvent(data){
         var location = new google.maps.LatLng(data.lat,data.long);
         var mark = placeMarker(location);
