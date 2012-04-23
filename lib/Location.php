@@ -45,13 +45,5 @@ class Location{
 		return "$this->name";
 	}
 }
-$loc = new Location(1);
-recLookup($loc);
-//print_r($loc->getChildren());
-function recLookup($location){
-	echo "$location <br>";
-	foreach($location->getChildren() as $child){
-		recLookup($child);
-	}
-}
+
 ?>
