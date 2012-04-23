@@ -12,7 +12,7 @@ Interface:
 	$user.subscribe(Location obj);
 */
 class User{
-	public $username, $userId, $first, $last, $email, $phone, $provider;
+	public $username, $userId, $first, $last, $email, $phone, $provider, $lastLogin;
 	private function __construct($user){
 		$db = connectDb();
 		$sql = "SELECT user_id, user_firstname, user_lastname, user_email, user_cell_phone, user_cell_email FROM users WHERE user_login_name=?";
