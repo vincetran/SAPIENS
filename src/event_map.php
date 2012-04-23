@@ -69,7 +69,7 @@ if(!User::resume()){
     
   $(document).ready(function(){
                 initialize();
-                $.post("bitch.php", function(data){
+                $.post("../lib/getLocations.php", function(data){
                   var i = 0;
                   for(i = 0; i < data.length; i++){
                     placeEvent(data[i]);                 
