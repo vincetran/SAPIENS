@@ -19,7 +19,8 @@
 		$stmt->bind_param('sss', $location->id, $severity, $desc);
 		$stmt->execute();
 		$stmt->close();
-		echo "Alert from User: $user->username at location: $location->name severity: $severity Description: $desc";	
+		$alertResult = 1;
+		//echo "Alert from User: $user->username at location: $location->name severity: $severity Description: $desc";	
 	}
 ?>
 <!DOCTYPE html>
@@ -91,12 +92,8 @@
 
 	<div class="sub">
 		<?php 
-			if(isset($subscribeResult) && $subscribeResult == 1){
-				echo "</br><div class=\"success\">Subscription Addition Succeeded!</div>";}
-			elseif(isset($subscribeResult) && $subscribeResult == -1){
-				echo "</br><div class=\"error\">Subscribe failed for some reason o_O</div>";}
-			elseif(isset($subscribeResult) && $subscribeResult == -2){
-				echo "</br><div class=\"error\">You're already subscribed to that location</div>";}
+			if(isset($alertResult) && $alertResult == 1){
+				echo "</br><div class=\"success\">Successfully Added a New Event!</div>";}
 		?>
 		<h1>Add a New Event</h1>
 		<form action="new_event.php" method="post">
