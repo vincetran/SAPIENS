@@ -28,6 +28,7 @@ if(!User::resume()){
     var NO_ALERT = "http://chart.apis.google.com/chart?chst=d_map_xpin_icon&chld=pin_sleft|glyphish_gear|555555";
     function initialize() {
       var iconWindows = []
+      var markerMap={}
       var myLatlng = new google.maps.LatLng(40.4412298, -79.95494);
       var myOptions = {
         zoom: 15,
@@ -60,20 +61,25 @@ if(!User::resume()){
         });   
     }
     
-    function placeEvent(data){
+    function placeEvent(data, fullText){
         var location = new google.maps.LatLng(data.lat,data.long);
         var mark = placeMarker(location);
-        var fullText= '<div class="scrollbar-container"><div class="inner">'+data.name+'</div></div>';
         setUpInfoPane(fullText, mark);
     }
-    
     
   $(document).ready(function(){
                 initialize();
                 $.post("../lib/getLocations.php", function(data){
-                  var i = 0;
+                  // TODO: Change to another function to make pretty info panes.
                   for(i = 0; i < data.length; i++){
-                    placeEvent(data[i]);                 
+                    mapCell = map[''+data[i].lat+''+data[i].long]
+                    if(mapCell){
+                      map[''+data[i].lat+''+data[i].long] = mapCell + '<div class="scrollbar-container"><div class="inner">'+data[i].name+'</div></div>';
+                    }
+                    else{
+                      map[''+data[i].lat+''+data[i].long] =  '<div class="scrollbar-container"><div class="inner">'+data[i].name+'</div></div>';
+                    }
+                    placeEvent(data[i], map[''+data[i].lat+''+data[i].long]);                 
                   }
                 }, 'json')
                 
