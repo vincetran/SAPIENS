@@ -20,7 +20,13 @@ if(!User::resume()){
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
     <script type="text/javascript">
     var map;
+    var iconWindows = []
+    var MAX_ALERT = "http://chart.apis.google.com/chart?chst=d_map_xpin_icon&chld=pin_sleft|glyphish_zap|FF2823";
+    var HIGH_ALERT = "http://chart.apis.google.com/chart?chst=d_map_xpin_icon&chld=pin_sleft|glyphish_gear|FFF82F";
+    var MEDIUM_ALERT = "http://chart.apis.google.com/chart?chst=d_map_xpin_icon&chld=pin_sleft|glyphish_gear|6AFF1A";
+    var LOW_ALERT = "http://chart.apis.google.com/chart?chst=d_map_xpin_icon&chld=pin_sleft|glyphish_gear|0069FF";
     function initialize() {
+      var iconWindows = []
       var myLatlng = new google.maps.LatLng(40.4412298, -79.95494);
       var myOptions = {
         zoom: 15,
@@ -31,9 +37,11 @@ if(!User::resume()){
     }
       
     function placeMarker(location) {
+      var cafeIcon = new google.maps.MarkerImage(LOW_ALERT);
       var marker = new google.maps.Marker({
           position: location, 
-          map: map
+          map: map,
+          icon: cafeIcon
       });
       map.setCenter(location);
       return marker;
@@ -42,11 +50,15 @@ if(!User::resume()){
         var infowindow = new google.maps.InfoWindow({
             content: text
         });
-        
+        iconWindows.push(infowindow);
         google.maps.event.addListener(marker, 'click', function(event) {
+            for(var i = 0; i < iconWindows.length; i++){
+              iconWindows[i].close();
+            }
             infowindow.open(map,marker);
         });   
     }
+    
     function placeEvent(data){
         var location = new google.maps.LatLng(data.lat,data.long);
         var mark = placeMarker(location);
