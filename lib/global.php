@@ -12,9 +12,13 @@ function getCPSDropDown(){
 		echo "\t<option value=\"".$cp_id."\">".$cp_name."</option>\n";
 	}
 }
-function severityDropDown(){
-	for($i=1; $i<5; $i++){
-		echo "\t<option value=\"".$i."\">".$i."</option>\n";
+function severityDropDown($max){
+	if(!isset($max)){
+		$max = 4;
+	}
+	$array = array('Non Critical', 'Critical', 'Very Critical', 'Not Applicable');
+	for($i=1; $i<$max; $i++){
+		echo "\t<option value=\"".$i."\">".$i." - ".$array[$i-1]."</option>\n";
 	}
 }
 function getLocationId($name){
