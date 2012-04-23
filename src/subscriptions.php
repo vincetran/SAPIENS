@@ -2,18 +2,16 @@
 	require_once("../lib/global.php");
 	require_once("../lib/User.php");
 	require_once("../lib/Location.php");
+	require_once("../lib/Subscription.php");
 	if(!User::resume()){
 		header("Location: login.php");
 	}
 	if($_POST && $_POST['loc'])
 	{
 		$location = new Location(getLocationId($_POST['loc']));
+		$subscription = new Subscription($location);
 		$user = User::resume();
-		if($user->subscribe($location, $_POST['severity_web'], $_POST['severity_email'], $_POST['severity_txt']))
-		{
-			$subscribeSuccess = TRUE;
-		}
-
+		$subscribeResult = $subscription->add($user, $_POST['severity_web'], $_POST['severity_email'], $_POST['severity_txt']);
 	}
 ?>
 <!DOCTYPE html>
@@ -84,8 +82,14 @@
 </div>
 
 	<div class="sub">
-		<?php if(1){
-			echo "</br><div class=\"success\">Subscription Addition Succeeded!</div>";} ?>
+		<?php 
+			if(isset($subscribeResult) && $subscribeResult == 1){
+				echo "</br><div class=\"success\">Subscription Addition Succeeded!</div>";}
+			elseif(isset($subscribeResult) && $subscribeResult == -1){
+				echo "</br><div class=\"error\">Subscribe failed for some reason o_O</div>";}
+			elseif(isset($subscribeResult) && $subscribeResult == -2){
+				echo "</br><div class=\"error\">You're already subscribed to that location</div>";}
+		?>
 		<h1>Current Subscriptions</h1>
 		<h1>Add a Subscription</h1>
 		<form action="subscriptions.php" method="post">

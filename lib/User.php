@@ -29,20 +29,6 @@ class User{
 	public function sendENS($location){
 		// TODO: Use location to send ENS alert from that (also check if it is possible!)
 	}
-	public function subscribe($location, $webLevel, $emailLevel, $textLevel){
-		$db = connectDb();
-		if(!$stmt = $db->prepare("INSERT INTO subscriptions(user_id, loc_id, min_severity_web, min_severity_email, min_severity_text) VALUES(?,?,?,?,?)")){
-			return FALSE;
-		}
-		if(!$stmt->bind_param('iiiii', $this->userId, $location->id, $webLevel, $emailLevel, $textLevel)){
-			return FALSE;
-		}
-		if(!$stmt->execute()){
-			return FALSE;
-		}
-		return TRUE;
-		$stmt->close();
-	}
 	
 	/*
 	///////////////////////////////////////////////////////////////////////////////////////////

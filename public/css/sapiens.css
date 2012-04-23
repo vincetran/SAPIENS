@@ -123,6 +123,7 @@ input{
 #navbar a:hover{
     color:#2FEA22;
 }
+/*
 .error{
     color:#D52309;
     font-family: 'Chau Philomene One', sans-serif;
@@ -133,6 +134,19 @@ input{
     background-color: #ffd2e0;
     border: 1px solid #9F0735;
     height: 25px;
+}
+*/
+.error{
+    color:#D52309;
+    font-family: 'Chau Philomene One', sans-serif;
+    text-align:center;
+    vertical-align:center;
+    padding: 5px 0px 5px 0px;
+    margin: auto;
+    background-color: #ffd2e0;
+    border: 1px solid #9F0735;
+    height: 25px;
+     width:25%;
 }
 .success{
     color:#0939d5;

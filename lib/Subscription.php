@@ -9,8 +9,19 @@ Interface:
 class Subscription{
 	private $userIds, $locationId;
 
-	private function __construct($location){
-
+	public function __construct($location){
+		$this->userIds = array();
+		$this->locationId = $location->id;
+		$db = connectDb();
+		$sql = "SELECT user_id FROM subscriptions WHERE loc_id=?";
+		$stmt = $db->prepare($sql);
+		$stmt->bind_param('i', $this->locationId);
+		$stmt->execute();
+		$stmt->bind_result($userId);
+		while($stmt->fetch()){
+			array_push($this->userIds, $userId);
+		}
+		$db->close();
 	}
 
 	public function notify($num){
@@ -18,7 +29,28 @@ class Subscription{
 	}
 
 	public function add($user, $webLevel, $emailLevel, $txtLevel){
-
+		for($i=0; $i< count($this->userIds); $i++){
+			if($this->userIds[$i] == $user->userId)
+			{
+				return -2;
+			}
+		}
+		$db = connectDb();
+		if(!$stmt = $db->prepare("INSERT INTO subscriptions(user_id, loc_id, min_severity_web, min_severity_email, min_severity_text) VALUES(?,?,?,?,?)")){
+			$db->close();
+			return -1;
+		}
+		if(!$stmt->bind_param('iiiii', $user->userId, $this->locationId, $webLevel, $emailLevel, $txtLevel)){
+			$db->close();
+			return -1;
+		}
+		if(!$stmt->execute()){
+			$db->close();
+			return -1;
+		}
+		array_push($this->userIds, $user->userId);
+		$db->close();
+		return 1;
 	}
 
 	public function check($user){
@@ -46,6 +78,7 @@ class Subscription{
 				-2 (on invalid location)
 				-3 (on invalid severity)
 	*/
+
 	public static function subscribe($user_id, $loc_id, $min_severity_web, $min_severity_email, $min_severity_text){
 		$db = connectDb();
 		$sql = "SELECT user_login_name FROM user WHERE user_id=?";
