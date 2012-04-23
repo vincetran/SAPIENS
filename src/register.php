@@ -12,7 +12,7 @@
 			$wrongField = true;	
 		}
 		else{
-			header('Location: test.php');
+			header('Location: sapiens.php');
 		}
 	}
 ?>
