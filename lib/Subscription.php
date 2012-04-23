@@ -28,12 +28,19 @@ class Subscription{
 
 	}
 
+	/*
+		FUNCTION: add
+		Params: user  -- user object
+				min_severity_web -- the minimum severity an event must have before contacting via this method
+				min_severity_email -- the minimum severity an event must have before contacting via this method
+				min_severity_text -- the minimum severity an event must have before contacting via this method
+		Return:  1 (on success)
+				-1 (on invalid input values)
+				-2 (on user is already subscribed)
+	*/
 	public function add($user, $webLevel, $emailLevel, $txtLevel){
-		for($i=0; $i< count($this->userIds); $i++){
-			if($this->userIds[$i] == $user->userId)
-			{
-				return -2;
-			}
+		if($this->check($user)){
+			return -2;
 		}
 		$db = connectDb();
 		if(!$stmt = $db->prepare("INSERT INTO subscriptions(user_id, loc_id, min_severity_web, min_severity_email, min_severity_text) VALUES(?,?,?,?,?)")){
@@ -53,71 +60,43 @@ class Subscription{
 		return 1;
 	}
 
+	/*
+		FUNCTION: check
+		Params: user  -- user object
+		Return: TRUE   (if found in array)
+				FALSE  (if not found in array)
+	*/
 	public function check($user){
-		
+		for($i=0; $i< count($this->userIds); $i++){
+			if($this->userIds[$i] == $user->userId)
+			{
+				return TRUE;
+			}
+		}
+		return FALSE;
 	}
+
+	/*
+		FUNCTION: remove
+		Params: user  -- user object
+		Return:  1 (on success)
+				-1 (on invalid input values)
+				-2 (on user is already subscribed)
+	*/
 	public function remove($user){
-
-	}
-
-	/*
-	///////////////////////////////////////////////////////////////////////////////////////////
-	BELOW THIS LINE IS WAYS TO CREATE THE SUBSCRIPTION OBJECT~~~~~~~~~~~~~~~~~~~~~~~
-	///////////////////////////////////////////////////////////////////////////////////////////
-	*/
-	
-	/*
-		FUNCTION: subscribe
-		Params: user_id  -- used to assign subscription to a user
-				loc_id -- user to mark subscription for ENS events from location
-				min_severity_web -- the minimum severity an event must have before contacting via this method
-				min_severity_email -- the minimum severity an event must have before contacting via this method
-				min_severity_text -- the minimum severity an event must have before contacting via this method
-		Return: Subscription (onSuccess)
-				-1 (on invalid user)
-				-2 (on invalid location)
-				-3 (on invalid severity)
-	*/
-
-	public static function subscribe($user_id, $loc_id, $min_severity_web, $min_severity_email, $min_severity_text){
-		$db = connectDb();
-		$sql = "SELECT user_login_name FROM user WHERE user_id=?";
-		$stmt = $db->prepare($sql);
-		$stmt->bind_param('i', $user_id);
-		$stmt->execute();
-		if($stmt->fetch())
-		{
-			$stmt->close();
-			$sql = "SELECT loc_name FROM locations WHERE loc_id=?";
-			$stmt = $db->prepare($sql);
-			$stmt->bind_param('i', $loc_id);
-			$stmt->execute();
-			if($stmt->fetch())
+		for($i=0; $i< count($this->userIds); $i++){
+			if($this->userIds[$i] == $user->userId)
 			{
-				$stmt->close();
-				if(is_numeric($severity) && $severity >= 1 && $severity <= 3){
-					$sql = "INSERT INTO subscriptions(user_id, loc_id, min_severity_web, min_severity_email, min_severity_text) VALUES(?,?,?)";
-					$stmt = $db->prepare($sql);
-					$stmt->bind_param('iiiii', $user_id, $loc_id, $min_severity_web, $min_severity_email, $min_severity_text);
-					$stmt->execute();
-					$db->close();
-					return new Subscription($user_id, $loc_id, $min_severity_web, $min_severity_email, $min_severity_text);
-				}
-				else{
-					return -3;
-				}
-			}
-			else
-			{
-				$db->close();
-				return -2;
+				array_splice($this->userIds, $i, 1);
+				$db = connectDb();
+				$sql = "DELETE FROM subscriptions WHERE user_id=? AND loc_id=?";
+				$stmt = $db->prepare($sql);
+				$stmt->bind_param('ii', $user->userId, $this->locationId);
+				$stmt->execute();
+				break;
 			}
 		}
-		else{
-			return -1;
-		}
-	}
-	
+	}	
 }
 
 ?>
