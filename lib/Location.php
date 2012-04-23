@@ -12,7 +12,6 @@ class Location{
 		$stmt->fetch();
 		$stmt->close();
 		########################################
-
 		$stmt = $db->prepare("SELECT loc_id from locations where parent_loc_id=?");
 		$stmt->bind_param('i', $id);
 		$stmt->execute();

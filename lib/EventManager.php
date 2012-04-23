@@ -31,7 +31,7 @@ class EventManager{
 		FUNCTION: createEvent
 		Params: loc_id  -- used to check for relevant subscriptions and to make dynamic subscriptions
 				severity -- defcon X
-				description -- de·scrip·tion/di'skripSH?n/ Noun: A spoken or written representation or account of a person, object, or event: "people who had seen him were able to give a description".
+				description -- 
 		Return: Event (onSuccess)
 				-1 (on invalid location)
 				-2 (on invalid severity)
