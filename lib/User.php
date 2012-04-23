@@ -12,10 +12,16 @@ Interface:
 	$user.subscribe(Location obj);
 */
 class User{
-	//Doesn't do validation, leave that to user object creation
-	public $username, $first, $last, $email, $phone, $provider;
-	private function __construct($username){
-
+	public $username, $userId, $first, $last, $email, $phone, $provider;
+	private function __construct($user){
+		$db = connectDb();
+		$sql = "SELECT user_id, user_firstname, user_lastname, user_email, user_cell_phone, user_cell_email FROM users WHERE user_login_name=?";
+		$stmt = $db->prepare($sql);
+		$stmt->bind_param('s', $user);
+		$stmt->execute();
+		$stmt->bind_result($this->userId, $this->first, $this->last, $this->email, $this->phone, $this->provider);
+		$stmt->fetch();
+		$db->close();
 	}
 	public function checkin($location){
 		// TODO: Use the location object to update the backend database with this information.
@@ -23,8 +29,19 @@ class User{
 	public function sendENS($location){
 		// TODO: Use location to send ENS alert from that (also check if it is possible!)
 	}
-	public function subscribe($location){
-		// TODO: Send database the subscription information for le location
+	public function subscribe($location, $webLevel, $emailLevel, $textLevel){
+		$db = connectDb();
+		if(!$stmt = $db->prepare("INSERT INTO subscriptions(user_id, loc_id, min_severity_web, min_severity_email, min_severity_text) VALUES(?,?,?,?,?)")){
+			return FALSE;
+		}
+		if(!$stmt->bind_param('iiiii', $this->userId, $location->id, $webLevel, $emailLevel, $textLevel)){
+			return FALSE;
+		}
+		if(!$stmt->execute()){
+			return FALSE;
+		}
+		return TRUE;
+		$stmt->close();
 	}
 	
 	/*

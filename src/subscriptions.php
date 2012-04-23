@@ -1,11 +1,21 @@
 <?php
 	require_once("../lib/global.php");
 	require_once("../lib/User.php");
+	require_once("../lib/Location.php");
 	if(!User::resume()){
 		header("Location: login.php");
 	}
-?>
+	if($_POST && $_POST['loc'])
+	{
+		$location = new Location(getLocationId($_POST['loc']));
+		$user = User::resume();
+		if($user->subscribe($location, $_POST['severity_web'], $_POST['severity_email'], $_POST['severity_txt']))
+		{
+			$subscribeSuccess = TRUE;
+		}
 
+	}
+?>
 <!DOCTYPE html>
 <html >
 <head>
@@ -25,12 +35,37 @@
 		var locations = [];
 		$.post("../lib/getLocations.php", function(data){
 			for(var i=0; i<data.length; i++){
-				locations.push(data.name);
+				locations.push(data[i].name);
 			}
-		}, "json")
 		$( "#tags" ).autocomplete({
 			source: locations
 		});
+		}, "json")
+		$("#subz").click(function(event){
+			var tag = $("#tags").val();
+			var isLegit = false;
+			for(var i = 0; i < locations.length; i++){
+				if(locations[i] == tag){
+					isLegit = true;
+				}
+			}
+			if(!isLegit){
+				alert("The location you entered is not part of our database.\n"+
+					"Please try again.");
+				event.preventDefault();
+			}
+		});
+
+	});
+</script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		setTimeout(fade_out, 3500);
+
+		function fade_out() {
+			$(".error").slideUp();
+			$(".success").slideUp();
+		}
 	});
 </script>
 </head>
@@ -49,6 +84,8 @@
 </div>
 
 	<div class="sub">
+		<?php if(1){
+			echo "</br><div class=\"success\">Subscription Addition Succeeded!</div>";} ?>
 		<h1>Current Subscriptions</h1>
 		<h1>Add a Subscription</h1>
 		<form action="subscriptions.php" method="post">
@@ -73,13 +110,12 @@
 
 			<div class="severe">
 			<label for="severity_txt">Text</label></br>
-			<select name="severity_web">
+			<select name="severity_txt">
 				<?php severityDropDown(); ?>
 			</select>
 			</div>
 			
-
-			</br></br><input type="submit" name="subscribe" value="Subscribe to Location"></br>
+			</br></br><input type="submit" id="subz" name="subscribe" value="Subscribe to Location"></br></br></br>
 		</form>
 	</div>
 

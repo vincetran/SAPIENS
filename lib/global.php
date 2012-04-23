@@ -17,4 +17,15 @@ function severityDropDown(){
 		echo "\t<option value=\"".$i."\">".$i."</option>\n";
 	}
 }
+function getLocationId($name){
+	$db = connectDb();
+	$stmt = $db->prepare("SELECT loc_id from locations where loc_name=?");
+	$stmt->bind_param('s', $name);
+	$stmt->execute();
+	$stmt->bind_result($id);
+	$stmt->fetch();
+	$stmt->close();
+	$db->close();
+	return $id;
+}
 ?>

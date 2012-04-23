@@ -134,6 +134,18 @@ input{
     border: 1px solid #9F0735;
     height: 25px;
 }
+.success{
+    color:#0939d5;
+    font-family: 'Chau Philomene One', sans-serif;
+    text-align:center;
+    vertical-align:center;
+    padding: 5px 0px 5px 0px;
+    background-color: #bce0ff;
+    border: 1px solid #07279f;
+    height: 25px;
+    margin:auto;
+    width:25%;
+}
 .shadow{
     -moz-box-shadow:3px 3px 5px 6px #ccc;
     -webkit-box-shadow:3px 3px 5px 6px #ccc;
