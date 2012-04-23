@@ -25,6 +25,7 @@ if(!User::resume()){
     var HIGH_ALERT = "http://chart.apis.google.com/chart?chst=d_map_xpin_icon&chld=pin_sleft|glyphish_gear|FFF82F";
     var MEDIUM_ALERT = "http://chart.apis.google.com/chart?chst=d_map_xpin_icon&chld=pin_sleft|glyphish_gear|6AFF1A";
     var LOW_ALERT = "http://chart.apis.google.com/chart?chst=d_map_xpin_icon&chld=pin_sleft|glyphish_gear|0069FF";
+    var NO_ALERT = "http://chart.apis.google.com/chart?chst=d_map_xpin_icon&chld=pin_sleft|glyphish_gear|555555";
     function initialize() {
       var iconWindows = []
       var myLatlng = new google.maps.LatLng(40.4412298, -79.95494);
@@ -37,7 +38,7 @@ if(!User::resume()){
     }
       
     function placeMarker(location) {
-      var cafeIcon = new google.maps.MarkerImage(LOW_ALERT);
+      var cafeIcon = new google.maps.MarkerImage(NO_ALERT);
       var marker = new google.maps.Marker({
           position: location, 
           map: map,
@@ -69,7 +70,7 @@ if(!User::resume()){
     
   $(document).ready(function(){
                 initialize();
-                $.post("bitch.php", function(data){
+                $.post("../lib/getLocations.php", function(data){
                   var i = 0;
                   for(i = 0; i < data.length; i++){
                     placeEvent(data[i]);                 
