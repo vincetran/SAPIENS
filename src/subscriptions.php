@@ -12,6 +12,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>SAPIENS - Subscriptions</title>
 <link rel="stylesheet" type="text/css" href="../public/css/sapiens.css?1232" />
+<link rel="stylesheet" type="text/css" href="../public/css/jquery.ui.1.8.16.ie.css" />
+<link rel="stylesheet" type="text/css" href="../public/css/jquery-ui-1.8.16.custom.css" />
 <link href='http://fonts.googleapis.com/css?family=Chewy' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=Chau+Philomene+One' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=Reenie+Beanie' rel='stylesheet' type='text/css'>
@@ -20,32 +22,14 @@
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
 <script>
 	$(function() {
-		var availableTags = [
-			"ActionScript",
-			"AppleScript",
-			"Asp",
-			"BASIC",
-			"C",
-			"C++",
-			"Clojure",
-			"COBOL",
-			"ColdFusion",
-			"Erlang",
-			"Fortran",
-			"Groovy",
-			"Haskell",
-			"Java",
-			"JavaScript",
-			"Lisp",
-			"Perl",
-			"PHP",
-			"Python",
-			"Ruby",
-			"Scala",
-			"Scheme"
-		];
+		var locations = [];
+		$.post("../lib/getLocations.php", function(data){
+			for(var i=0; i<data.length; i++){
+				locations.push(data.name);
+			}
+		}, "json")
 		$( "#tags" ).autocomplete({
-			source: availableTags
+			source: locations
 		});
 	});
 </script>
@@ -68,10 +52,8 @@
 		<h1>Current Subscriptions</h1>
 		<h1>Add a Subscription</h1>
 		<form action="subscriptions.php" method="post">
-			<div class="ui-widget">
 			<label for="loc">Location</label></br>
 			<input type="text" name="loc" size="30" id="tags"></br></br>
-			</div>
 
 			<label for="severity">Severity Levels</label></br></br>
 
