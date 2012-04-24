@@ -21,11 +21,11 @@ if(!User::resume()){
     <script type="text/javascript">
     var map;
     var iconWindows = []
-    var MAX_ALERT = "http://chart.apis.google.com/chart?chst=d_map_xpin_icon&chld=pin_sleft|glyphish_zap|FF2823";
-    var HIGH_ALERT = "http://chart.apis.google.com/chart?chst=d_map_xpin_icon&chld=pin_sleft|glyphish_gear|FFF82F";
-    var MEDIUM_ALERT = "http://chart.apis.google.com/chart?chst=d_map_xpin_icon&chld=pin_sleft|glyphish_gear|6AFF1A";
-    var LOW_ALERT = "http://chart.apis.google.com/chart?chst=d_map_xpin_icon&chld=pin_sleft|glyphish_gear|0069FF";
-    var NO_ALERT = "http://chart.apis.google.com/chart?chst=d_map_xpin_icon&chld=pin_sleft|glyphish_gear|555555";
+    var colors = ["http://chart.apis.google.com/chart?chst=d_map_xpin_icon&chld=pin_sleft|glyphish_gear|0069FF",
+    "http://chart.apis.google.com/chart?chst=d_map_xpin_icon&chld=pin_sleft|glyphish_gear|6AFF1A",
+     "http://chart.apis.google.com/chart?chst=d_map_xpin_icon&chld=pin_sleft|glyphish_gear|FFF82F",
+     "http://chart.apis.google.com/chart?chst=d_map_xpin_icon&chld=pin_sleft|glyphish_zap|FF2823" ];
+
     function initialize() {
       var iconWindows = []
       var markerMap={}
@@ -38,8 +38,8 @@ if(!User::resume()){
       map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
     }
       
-    function placeMarker(location) {
-      var cafeIcon = new google.maps.MarkerImage(NO_ALERT);
+    function placeMarker(location,color) {
+      var cafeIcon = new google.maps.MarkerImage(color);
       var marker = new google.maps.Marker({
           position: location, 
           map: map,
@@ -61,9 +61,9 @@ if(!User::resume()){
         });   
     }
     
-    function placeEvent(data, fullText){
+    function placeEvent(data, fullText, color){
         var location = new google.maps.LatLng(data.location.lat,data.location.long);
-        var mark = placeMarker(location);
+        var mark = placeMarker(location,color);
         setUpInfoPane(fullText, mark);
     }
     function setText(elem, currentText){
@@ -74,6 +74,15 @@ if(!User::resume()){
       }
       text+= '</div>';
       return text;
+    }
+    function getIcon(elem){
+      var currentValue = 0;
+      for(var i = 0; i < elem.events.length; i++){
+        if(elem.events[i].severity > currentValue){
+          currentValue = elem.events[i].severity;
+        }
+      }
+      return colors[currentValue];
     }
   $(document).ready(function(){
                 initialize();
@@ -88,7 +97,7 @@ if(!User::resume()){
                     else{
                       map[''+data[i].location.lat+''+data[i].location.long] =  setText(data[i], '');
                     }
-                    placeEvent(data[i], map[''+data[i].location.lat+''+data[i].location.long]);                 
+                    placeEvent(data[i], map[''+data[i].location.lat+''+data[i].location.long], getIcon(data[i]));                 
                   }
                 }, 'json')
                 

@@ -124,6 +124,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `user_cell_provider` int(11) NOT NULL,
   `user_cell_email` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `last_login_ts` timestamp NULL DEFAULT NULL,
+  `current_login_ts` timestamp NULL DEFAULT NULL,
   `last_loc_id` int(11) DEFAULT NULL,
   `last_loc_checkin_ts` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`user_id`)
