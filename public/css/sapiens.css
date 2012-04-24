@@ -157,7 +157,7 @@ input{
     padding: 5px 0px 5px 0px;
     background-color: #bce0ff;
     border: 1px solid #07279f;
-    height: 25px;
+    height: auto;
     margin:auto;
     width:25%;
 }
