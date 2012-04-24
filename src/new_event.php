@@ -10,16 +10,24 @@
 	if($_POST && $_POST['loc'] && $_POST['desc'])
 	{
 		$location = new Location(getLocationId($_POST['loc']));
+		
 		$user = User::resume();
+		$sub = new Subscription($location);
 		$severity = $_POST['severity'];
 		$desc = $_POST['desc'];
+		if($sub->check($user)){
+			$db = connectDb();
+			$stmt = $db->prepare("INSERT INTO events(loc_id, event_severity, event_description) VALUES(?,?,?)");
+			$stmt->bind_param('sss', $location->id, $severity, $desc);
+			$stmt->execute();
+			$stmt->close();
+			$alertResult = 1;
+		}else{
+			$alertResult = 0;
+		}
 		
-		$db = connectDb();
-		$stmt = $db->prepare("INSERT INTO events(loc_id, event_severity, event_description) VALUES(?,?,?)");
-		$stmt->bind_param('sss', $location->id, $severity, $desc);
-		$stmt->execute();
-		$stmt->close();
-		$alertResult = 1;
+		
+		
 		//echo "Alert from User: $user->username at location: $location->name severity: $severity Description: $desc";	
 	}
 ?>
@@ -94,6 +102,8 @@
 		<?php 
 			if(isset($alertResult) && $alertResult == 1){
 				echo "</br><div class=\"success\">Successfully Added a New Event!</div>";}
+			if(isset($alertResult) && $alertResult == 0){
+				echo "</br><div class=\"success\">You must subscribe to this location in order to make an event for it!</div>";}
 		?>
 		<h1>Add a New Event</h1>
 		<form action="new_event.php" method="post">

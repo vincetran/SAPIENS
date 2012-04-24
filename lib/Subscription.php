@@ -13,19 +13,19 @@ class Subscription{
 		$this->userIds = array();
 		$this->locationId = $location->id;
 		$db = connectDb();
-		$sql = "SELECT user_id FROM subscriptions WHERE loc_id=?";
+		$sql = "SELECT user_id, min_severity_web, min_severity_email, min_severity_text FROM subscriptions WHERE loc_id=?";
 		$stmt = $db->prepare($sql);
 		$stmt->bind_param('i', $this->locationId);
 		$stmt->execute();
-		$stmt->bind_result($userId);
+		$stmt->bind_result($userId, $webLevel, $emailLevel, $txtLevel);
 		while($stmt->fetch()){
-			array_push($this->userIds, $userId);
+			array_push($this->userIds, array($userId, $webLevel, $emailLevel, $txtLevel));
 		}
 		$db->close();
 	}
 
 	public function notify($num){
-
+		
 	}
 
 	/*
@@ -55,7 +55,7 @@ class Subscription{
 			$db->close();
 			return -1;
 		}
-		array_push($this->userIds, $user->userId);
+		array_push($this->userIds, array($user->userId, $webLevel, $emailLevel, $txtLevel));
 		$db->close();
 		return 1;
 	}
@@ -68,7 +68,7 @@ class Subscription{
 	*/
 	public function check($user){
 		for($i=0; $i< count($this->userIds); $i++){
-			if($this->userIds[$i] == $user->userId)
+			if(in_array($user->userId, $this->userIds[$i]))
 			{
 				return TRUE;
 			}
