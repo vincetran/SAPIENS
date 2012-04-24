@@ -62,24 +62,33 @@ if(!User::resume()){
     }
     
     function placeEvent(data, fullText){
-        var location = new google.maps.LatLng(data.lat,data.long);
+        var location = new google.maps.LatLng(data.location.lat,data.location.long);
         var mark = placeMarker(location);
         setUpInfoPane(fullText, mark);
     }
-    
+    function setText(elem, currentText){
+      var text = '<div class="scrollbar-container"><div class="inner">'+elem.location.name+'</div>';
+      text = currentText + text;
+      for(var i = 0; i < elem.events.length; i++){
+        text += ('<div class="data"> Event:'+elem.events[i].description+'</div>');
+      }
+      text+= '</div>';
+      return text;
+    }
   $(document).ready(function(){
                 initialize();
-                $.post("../lib/getLocations.php", function(data){
+                $.post("test.php", function(data){
+                  console.log(data);
                   // TODO: Change to another function to make pretty info panes.
                   for(i = 0; i < data.length; i++){
-                    mapCell = map[''+data[i].lat+''+data[i].long]
+                    mapCell = map[''+data[i].location.lat+''+data[i].location.long]
                     if(mapCell){
-                      map[''+data[i].lat+''+data[i].long] = mapCell + '<div class="scrollbar-container"><div class="inner">'+data[i].name+'</div></div>';
+                      map[''+data[i].location.lat+''+data[i].location.long] = setText(data[i], mapCell);
                     }
                     else{
-                      map[''+data[i].lat+''+data[i].long] =  '<div class="scrollbar-container"><div class="inner">'+data[i].name+'</div></div>';
+                      map[''+data[i].location.lat+''+data[i].location.long] =  setText(data[i], '');
                     }
-                    placeEvent(data[i], map[''+data[i].lat+''+data[i].long]);                 
+                    placeEvent(data[i], map[''+data[i].location.lat+''+data[i].location.long]);                 
                   }
                 }, 'json')
                 
