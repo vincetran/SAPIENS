@@ -27,9 +27,16 @@ class EventManager{
 		}
 		$db->close();
 	}
-	private function getEventsAtLocation($user, $location, $time = -1){
+
+	private function getEventsAtLocation($user, $location, $time = -1, $isDynamic = false){
 		$eventsArray = array();
-		$sql = "SELECT events.event_description, events.event_ts, events.event_severity from events join (SELECT loc_id, min_severity_web from subscriptions where user_id = ? and loc_id = ?) as loc on loc.loc_id = events.loc_id where  events.event_severity >= loc.min_severity_web  and loc.min_severity_web < 4";
+		$sql = "";
+		if($isDynamic){
+			$sql = "SELECT events.event_description, events.event_ts, events.event_severity from events join (SELECT last_loc_id as loc_id, min_severity_web, min_severity_email, min_severity_text from users natural join dynamic_subscriptions) as loc on loc.loc_id = events.loc_id where events.event_severity >= loc.min_severity_web  and loc.min_severity_web < 4";
+		}
+		else{
+			$sql = "SELECT events.event_description, events.event_ts, events.event_severity from events join (SELECT loc_id, min_severity_web from subscriptions where user_id = ? and loc_id = ?) as loc on loc.loc_id = events.loc_id where events.event_severity >= loc.min_severity_web  and loc.min_severity_web < 4";		
+		}
 		$db = connectDb();
 		if($time != -1){
 			$sql .= " and events.event_ts >= ?";
@@ -58,6 +65,7 @@ class EventManager{
 				$bigObj = array("location"=>$locationObj, "events"=>$eventObj);
 				$objs[] = $bigObj;
 			}
+
 			return $objs;
 			
 	}
