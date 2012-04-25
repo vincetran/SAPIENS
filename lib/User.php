@@ -44,7 +44,7 @@ class User{
 			echo "<tr>\n";
 			echo "<td>".$locName."</td>\n<td>".$locDescription."</td>\n<td>".$minWeb.
 			"</td>\n<td>".$minEmail."</td>\n<td>".$minText."</td>\n";
-			echo "<td><input type=\"submit\" name=\"unsub\" value=\"Unsubscribe\">";
+			echo "<td><input type=\"submit\" class=\"butt_input\" name=\"unsub\" value=\"Unsubscribe\">";
 			echo "<input type=\"hidden\" name=\"loc_id\" value=\"".$locId."\">";
 			echo "</tr>";
 			echo "</form>";

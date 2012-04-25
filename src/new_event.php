@@ -9,7 +9,8 @@
 	}
 	if($_POST && $_POST['loc'] && $_POST['desc'])
 	{
-		$location = new Location(getLocationId($_POST['loc']));
+		$split = explode(" - ", $_POST['loc']);
+		$location = new Location(getLocationId($split[0]));
 		
 		$user = User::resume();
 		$sub = new Subscription($location);
@@ -48,9 +49,10 @@
 <script>
 	$(function() {
 		var locations = [];
+		var location;
 		$.post("../lib/getLocations.php", function(data){
 			for(var i=0; i<data.length; i++){
-				locations.push(data[i].name);
+				locations.push(data[i].name + " - " + data[i].description);
 			}
 		$( "#tags" ).autocomplete({
 			source: locations
@@ -120,7 +122,7 @@
 			<br/></br><label for="desc">Event Description</label></br>
 			<textarea name="desc" maxlength="256" id="desc" rows="5" cols="50"></textarea></br>
 			
-			</br><input type="submit" id="alert" name="alert" value="Add a New Event"></br></br></br>
+			</br><input type="submit" id="alert" class="butt_input" name="alert" value="Add a New Event"></br></br></br>
 		</form>
 	</div>
 

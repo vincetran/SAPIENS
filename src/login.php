@@ -9,6 +9,9 @@
 		if($result != -1 && $result != -2){
 			header('Location: sapiens.php');
 		}
+		else{
+			header('Location: register.php');
+		}
 	}
 ?>
 <!DOCTYPE html>
@@ -26,14 +29,14 @@
 	<form action="login.php" method="post">
 		<label for="username">Username</label><input type="text" name="username"></br>
 		<label for="password">Password</label><input type="password" name="password"></br></br>
-		<input type="submit" name="login" value="Login"></br>
+		<span style="cursor:pointer"><input type="submit" class="butt_input" name="login" value="Login"></span></br>
 		<?php
 		if(isset($result) && $result==-1)
 			echo "<div class=\"error\">Username not found.</div>\n";
 		elseif(isset($result) && $result==-2)
 			echo "<div class=\"error\">Incorrect user/pass combo</div>\n";
 		?>
-		</br><a href="register.php">Register</a>
+		</br><a href="register.php">Register</a></div>
 	</form>
 </div>
 </div>

@@ -4,6 +4,7 @@
 	require_once("../lib/Location.php");
 	require_once("../lib/Subscription.php");
 	$user = User::resume();
+
 	if(!$user){
 		header("Location: login.php");
 	}
@@ -54,7 +55,6 @@
 		$("#subz").click(function(event){
 			var tag = $("#tags").val();
 			var isLegit = false;
-			var split = tag.split(" - ");
 			for(var i = 0; i < locations.length; i++){
 				if(locations[i] == tag){
 					isLegit = true;
@@ -154,7 +154,7 @@
 			</select>
 			</div>
 			
-			</br></br><input type="submit" id="subz" name="subscribe" value="Subscribe to Location"></br></br></br>
+			</br></br><input type="submit" id="subz" class="butt_input" name="subscribe" value="Subscribe to Location"></br></br></br>
 		</form>
 	</div>
 
