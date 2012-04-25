@@ -79,13 +79,12 @@ class Subscription{
 	/*
 		FUNCTION: remove
 		Params: user  -- user object
-		Return:  1 (on success)
-				-1 (on invalid input values)
-				-2 (on user is already subscribed)
+		Return:  TRUE (on success)
+				FALSE (on failure)
 	*/
 	public function remove($user){
 		for($i=0; $i< count($this->userIds); $i++){
-			if($this->userIds[$i] == $user->userId)
+			if($this->userIds[$i][0] == $user->userId)
 			{
 				array_splice($this->userIds, $i, 1);
 				$db = connectDb();
@@ -93,9 +92,10 @@ class Subscription{
 				$stmt = $db->prepare($sql);
 				$stmt->bind_param('ii', $user->userId, $this->locationId);
 				$stmt->execute();
-				break;
+				return TRUE;
 			}
 		}
+		return FALSE;
 	}	
 }
 

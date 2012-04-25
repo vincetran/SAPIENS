@@ -113,7 +113,7 @@
 			<div class="severe">
 			<label for="severity">Severity</label></br>
 			<select name="severity">
-				<?php severityDropDown(); ?>
+				<?php severityDropDown(4); ?>
 			</select>
 			</div>
 			

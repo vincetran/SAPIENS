@@ -3,15 +3,26 @@
 	require_once("../lib/User.php");
 	require_once("../lib/Location.php");
 	require_once("../lib/Subscription.php");
-	if(!User::resume()){
+	$user = User::resume();
+	if(!$user){
 		header("Location: login.php");
 	}
-	if($_POST && $_POST['loc'])
+	if(isset($_POST['loc']))
 	{
-		$location = new Location(getLocationId($_POST['loc']));
+		$split = explode(" - ", $_POST['loc']);
+		$location = new Location(getLocationId($split[0]));
 		$subscription = new Subscription($location);
 		$user = User::resume();
 		$subscribeResult = $subscription->add($user, $_POST['severity_web'], $_POST['severity_email'], $_POST['severity_txt']);
+	}
+	if(isset($_POST['unsub']))
+	{
+		$location = new Location($_POST['loc_id']);
+		$subscription = new Subscription($location);
+		$user = User::resume();
+		if($subscription->check($user)){
+			$unsubResult = $subscription->remove($user);
+		}
 	}
 ?>
 <!DOCTYPE html>
@@ -31,9 +42,10 @@
 <script>
 	$(function() {
 		var locations = [];
+		var location;
 		$.post("../lib/getLocations.php", function(data){
 			for(var i=0; i<data.length; i++){
-				locations.push(data[i].name);
+				locations.push(data[i].name + " - " + data[i].description);
 			}
 		$( "#tags" ).autocomplete({
 			source: locations
@@ -42,6 +54,7 @@
 		$("#subz").click(function(event){
 			var tag = $("#tags").val();
 			var isLegit = false;
+			var split = tag.split(" - ");
 			for(var i = 0; i < locations.length; i++){
 				if(locations[i] == tag){
 					isLegit = true;
@@ -64,6 +77,10 @@
 			$(".error").slideUp();
 			$(".success").slideUp();
 		}
+
+		$('#toggle').click(function() {
+			$('#currsub').toggle('slow');
+		});
 	});
 </script>
 </head>
@@ -89,8 +106,26 @@
 				echo "</br><div class=\"error\">Subscribe failed for some reason o_O</div>";}
 			elseif(isset($subscribeResult) && $subscribeResult == -2){
 				echo "</br><div class=\"error\">You're already subscribed to that location</div>";}
+			elseif(isset($unsubResult) && $unsubResult){
+				echo "</br><div class=\"success\">Successfully unsubscribed</div>";}
+				elseif(isset($unsubResult) && !$unsubResult){
+				echo "</br><div class=\"error\">Failed trying to unsubscribe</div>";}
 		?>
 		<h1>Current Subscriptions</h1>
+		<div id="toggle"><a>(hide/show)</a></div>
+		<div id="currsub">
+			<table cellpadding="5">
+				<tr>
+					<th>Location Name</th>
+					<th>Location Description</th>
+					<th>Minimum Web Severity</th>
+					<th>Minimum Email Severity</th>
+					<th>Minimum Text Severity</th>
+					<th></th>
+				</tr>
+			<?php $user->getSubs(); ?>
+			</table>
+		</div>
 		<h1>Add a Subscription</h1>
 		<form action="subscriptions.php" method="post">
 			<label for="loc">Location</label></br>
