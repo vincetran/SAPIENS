@@ -29,7 +29,27 @@ class User{
 	public function sendENS($location){
 		// TODO: Use location to send ENS alert from that (also check if it is possible!)
 	}
-	
+	public function getSubs(){
+		$db = connectDb();
+		$sql = "SELECT sub_id, loc_id, loc_name, loc_description, min_severity_web, min_severity_email, min_severity_text 
+			from locations natural join 
+			(select sub_id, loc_id, min_severity_web, min_severity_email, min_severity_text 
+				from subscriptions natural join users where users.user_id=?) as a";
+		$stmt = $db->prepare($sql);
+		$stmt->bind_param('s', $this->userId);
+		$stmt->execute();
+		$stmt->bind_result($subId, $locId, $locName, $locDescription, $minWeb, $minEmail, $minText);
+		while($stmt->fetch()){
+			echo "<form action=\"subscriptions.php\" method=\"post\">";
+			echo "<tr>\n";
+			echo "<td>".$locName."</td>\n<td>".$locDescription."</td>\n<td>".$minWeb.
+			"</td>\n<td>".$minEmail."</td>\n<td>".$minText."</td>\n";
+			echo "<td><input type=\"submit\" name=\"unsub\" value=\"Unsubscribe\">";
+			echo "<input type=\"hidden\" name=\"loc_id\" value=\"".$locId."\">";
+			echo "</tr>";
+			echo "</form>";
+		}
+	}
 	/*
 	///////////////////////////////////////////////////////////////////////////////////////////
 	BELOW THIS LINE IS WAYS TO CREATE THE USER OBJECT~~~~~~~~~~~~~~~~~~~~~~~

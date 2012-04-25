@@ -12,9 +12,18 @@ a{
     font-weight:700;
     color: #2FEA22;
 }
+a:hover{
+    cursor: pointer;
+}
 h1{
     color:#259700;
     font-size:25px;
+    margin-bottom:0px;
+}
+h3{
+    color:#0f3f00;
+    font-size:14px;
+    margin-top:0px;
 }
 body{
 	margin: 0px;
@@ -31,7 +40,27 @@ body{
     padding: 30px;
     width:600px;
     margin: auto;
+    text-align:center;
  }
+.register label{
+    font-size: 18px;
+    font-family: "TriplexBold";
+    color: #625656;
+    clear: all;
+    display: block;
+    position: relative;
+    text-align: center;
+    padding: 10px;
+}
+.register select{
+    font-family: 'Droid Sans', sans-serif;
+    font-weight:700;
+    color: #625656;
+    padding: 5px;
+    width: 190px;
+    left: 5px;
+    text-align: center;
+}
 input{
     font-size: 15px;
     padding: 5px;
@@ -39,7 +68,7 @@ input{
     border-radius: 4px;
 }
 .sub{
-    padding: 20px
+    padding: 20px;
     width: 600px;
     margin:auto;
 }
@@ -60,28 +89,6 @@ input{
 .severe{
     display:inline-block;
     padding:3px;
-}
-.register label{
-    font-size: 18px;
-    font-family: "TriplexBold";
-    color: #625656;
-    clear: all;
-    display: block;
-    position: relative;
-    left: -60px;
-    text-align: center;
-    padding: 10px;
-}
-.register select{
-    font-family: 'Droid Sans', sans-serif;
-    font-weight:700;
-    color: #625656;
-    padding: 5px;
-    width: 190px;
-    position:relative;
-    left: 5px;
-    display: block;
-    text-align: center;
 }
 #container{
 	text-align:center;
