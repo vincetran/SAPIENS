@@ -14,7 +14,7 @@ function getCPSDropDown(){
 }
 function severityDropDown($max){
 	if(!isset($max)){
-		$max = 4;
+		$max = 5;
 	}
 	$array = array('Non Critical', 'Critical', 'Very Critical', 'Not Applicable');
 	for($i=1; $i<$max; $i++){

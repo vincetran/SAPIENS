@@ -9,7 +9,8 @@
 	}
 	if(isset($_POST['loc']))
 	{
-		$location = new Location(getLocationId($_POST['loc']));
+		$split = explode(" - ", $_POST['loc']);
+		$location = new Location(getLocationId($split[0]));
 		$subscription = new Subscription($location);
 		$user = User::resume();
 		$subscribeResult = $subscription->add($user, $_POST['severity_web'], $_POST['severity_email'], $_POST['severity_txt']);
@@ -41,9 +42,10 @@
 <script>
 	$(function() {
 		var locations = [];
+		var location;
 		$.post("../lib/getLocations.php", function(data){
 			for(var i=0; i<data.length; i++){
-				locations.push(data[i].name);
+				locations.push(data[i].name + " - " + data[i].description);
 			}
 		$( "#tags" ).autocomplete({
 			source: locations
@@ -52,6 +54,7 @@
 		$("#subz").click(function(event){
 			var tag = $("#tags").val();
 			var isLegit = false;
+			var split = tag.split(" - ");
 			for(var i = 0; i < locations.length; i++){
 				if(locations[i] == tag){
 					isLegit = true;
@@ -111,13 +114,14 @@
 		<h1>Current Subscriptions</h1>
 		<div id="toggle"><a>(hide/show)</a></div>
 		<div id="currsub">
-			<table >
+			<table cellpadding="5">
 				<tr>
-					<td><b>Location Name</b></td>
-					<td><b>Location Description</b></td>
-					<td><b>Minimum Web Severity</b></td>
-					<td><b>Minimum Email Severity</b></td>
-					<td><b>Minimum Text Severity</b></td>
+					<th>Location Name</th>
+					<th>Location Description</th>
+					<th>Minimum Web Severity</th>
+					<th>Minimum Email Severity</th>
+					<th>Minimum Text Severity</th>
+					<th></th>
 				</tr>
 			<?php $user->getSubs(); ?>
 			</table>
