@@ -40,6 +40,9 @@ class Location{
 		}
 		return $children;
 	}
+	public function getId(){
+		return "$this->id";
+	}
 	public function __tostring(){
 		return "$this->name";
 	}

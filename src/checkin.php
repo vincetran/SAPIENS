@@ -23,6 +23,20 @@
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
 
+<script type="text/javascript">
+	$(document).ready(function(){
+		setTimeout(fade_out, 3500);
+
+		function fade_out() {
+			$(".error").slideUp();
+			$(".success").slideUp();
+		}
+
+		$('#toggle').click(function() {
+			$('#kony').toggle('slow');
+		});
+	});
+</script>
 </head>
 <body>
 <div id ="title">SAPI<span style="color:#4CE11C;">ENS</span></div>
@@ -36,11 +50,23 @@
 	<a href="new_event.php">Submit a New Event</a>
 	<a href="logout.php">Logout</a>
 </div>
-
-	<div>
-		Kony 2012
-	</div
-
+	<div class="sub">
+		<h1>Check In</h1>
+		<div id="toggle"><a>(hide/show)</a></div>
+		<div id="kony">
+			Kony 2012
+		</div>
+		<label for="loc">Location</label></br>
+		<div class="loc">
+			<select name="severity_web">
+				<?php 
+					//$location = new Location(getLocationId($ROOT_LOCATION));
+					//echo $location;
+					checkInDropDown(); 
+				?>
+			</select>
+			</div>
+	</div>
 </div>
 </div>
 </body>
