@@ -1,7 +1,7 @@
 <?php
 function connectDb()
 {
-	$db = new mysqli('localhost', 'root', '128411', 'sapiens');
+	$db = new mysqli('localhost', 'root', '', 'sapiens');
 	if(!$db){
 		die('Could not connect');
 	}
