@@ -167,6 +167,41 @@ input{
     box-shadow:3px 3px 5px 6px #ccc;
     margin: 10px;
 }
+.scrollbarcontainer{
+    border: 1px solid #CCCCCC;
+    border-radius: 7px;
+    background-color: #EBEBEB;
+    padding: 6px;
+    margin-bottom:5px;
+    max-width: 250px;
+}
+.type{
+    padding: 7px;
+    font-family: 'Audiowide', cursive;
+    font-size: 20px;
+}
+.data1{
+    color: #00D40B;
+    border-top: 1px solid #D6CFCF;
+    padding-top:5px;
+    padding-bottom:5px;
+    font-family: 'Averia Libre', cursive;
+    
+}
+.data2{
+    color: #CCAE00;
+    border-top: 1px solid #D6CFCF;
+    padding-top:5px;
+    padding-bottom:5px;
+    font-family: 'Averia Libre', cursive;
+}
+.data3{
+    color: #F61F06;
+    border-top: 1px solid #D6CFCF;
+    padding-top:5px;
+    padding-bottom:5px;
+    font-family: 'Averia Libre', cursive;
+}
 ::-webkit-scrollbar {
     background: transparent;
     border-radius:4px;
@@ -180,3 +215,4 @@ input{
     background-color: rgba(0,0,0,.6);
     -webkit-border-radius: 50px;
 }​
+
