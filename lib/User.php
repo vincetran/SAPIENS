@@ -26,9 +26,9 @@ class User{
 	public function checkin($location){
 		// TODO: Use the location object to update the backend database with this information.
 		$db = connectDb();
-		$sql = "UPDATE users SET last_loc_checkin_ts=NOW(),last_loc_id=?";
+		$sql = "UPDATE users SET last_loc_checkin_ts=NOW(),last_loc_id=? WHERE user_id=?";
 		$stmt = $db->prepare($sql);
-		$stmt->bind_param('i', $location->id);
+		$stmt->bind_param('ii', $location->id, $this->userId);
 		if(!$stmt->execute()){
 			$db->close();
 			return -1;

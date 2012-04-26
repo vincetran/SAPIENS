@@ -12,69 +12,84 @@ class Subscription{
 	public function __construct($location){
 		$this->userIds = array();
 		$this->locationId = $location->id;
+
+		$dynamicIds = array();
+		$dynSubs = array();
+		$staticSubs = array();
+
 		$db = connectDb();
-		//Dynamic
-		$sql = "SELECT user_id FROM users WHERE last_loc_id IS NOT NULL AND 
+		$sql = "SELECT user_id FROM users WHERE last_loc_id=? AND 
 				last_loc_checkin_ts	> DATE_SUB(NOW(), INTERVAL 2 HOUR)";
-		$stmt = $db->prepare($sql);
-		$stmt->execute();
-		$stmt->bind_result($userId);
-		while($stmt->fetch()){
-			array_push($temp1, $userId);
-		}
-		$stmt->close();
-		foreach($temp1 as $userId){
-			$sql = "SELECT user_id, min_severity_web, min_severity_email, min_severity_text FROM dynamic_subscriptions WHERE user_id=?";
-			$stmt = $db->prepare($sql);
-			$stmt->bind_param('i', $userId);
-			$stmt->execute();
-			$stmt->bind_result($userId, $webLevel, $emailLevel, $txtLevel);
-			while($stmt->fetch()){
-				$temp2[$userId] = array($webLevel, $emailLevel, $txtLevel);
-				//array_push($this->userIds, array($userId, $webLevel, $emailLevel, $txtLevel));
-			}
-		}
-		$stmt->close();
-		
-		//Subs
-		$sql = "SELECT user_id, min_severity_web, min_severity_email, min_severity_text FROM subscriptions WHERE loc_id=?";
 		$stmt = $db->prepare($sql);
 		$stmt->bind_param('i', $this->locationId);
 		$stmt->execute();
-		$stmt->bind_result($userId, $webLevel, $emailLevel, $txtLevel);
+		$stmt->bind_result($userId);
 		while($stmt->fetch()){
-			$temp3[$userId] = array($webLevel, $emailLevel, $txtLevel);
-			//array_push($this->userIds, array($userId, $webLevel, $emailLevel, $txtLevel));
+			array_push($dynamicIds, $userId);
 		}
-		foreach(array_keys($temp2) as $key){
-			if(array_key_exists($key, $temp3)){
-				//get min
-				if($temp2[$key][0] > $temp3[$key][0]){
-					$webLevel = $temp3[$key][0];
-				}
-				else{
-					$webLevel = $temp2[$key][0];
-				}
-				if($temp2[$key][1] > $temp3[$key][1]){
-					$emailLevel = $temp3[$key][1];
-				}
-				else{
-					$emailLevel = $temp2[$key][1];
-				}
-				if($temp2[$key][2] > $temp3[$key][2]){
-					$txtLevel = $temp3[$key][2];
-				}
-				else{
-					$txtLevel = $temp2[$key][2];
-				}
-				array_push($this->userIds, array($key, $webLevel,$emailLevel,$txtLevel));
+		$stmt->close();
+
+		foreach($dynamicIds as $userId){
+			$sql = "SELECT user_id, min_severity_web, min_severity_email, min_severity_text 
+			FROM dynamic_subscriptions WHERE user_id=?";
+			$stmt = $db->prepare($sql);
+			$stmt->bind_param('i', $userIdFound);
+			$stmt->execute();
+			$stmt->bind_result($userIdFound, $webLevel, $emailLevel, $txtLevel);
+			while($stmt->fetch()){
+				$dynSubs[$userIdFound] = array($webLevel, $emailLevel, $txtLevel);
 			}
-			else{
-				array_push($this->userIds, array($key, $temp3[$key][0],$temp3[$key][1],$temp3[$key][2]));
+			$stmt->close();
+		}
+		
+		//Subs
+		$sql = "SELECT user_id, min_severity_web, min_severity_email, min_severity_text 
+			FROM subscriptions WHERE loc_id=?";
+		$stmt = $db->prepare($sql);
+		$stmt->bind_param('i', $this->locationId);
+		$stmt->execute();
+		$stmt->bind_result($userId2, $webLevel, $emailLevel, $txtLevel);
+		while($stmt->fetch()){
+			$staticSubs[$userId2] = array($webLevel, $emailLevel, $txtLevel);
+			echo "Static ".$userId2;
+		}
+
+		if(count($dynSubs) == 0)
+		{
+			foreach(array_keys($staticSubs) as $key){
+				array_push($this->userIds, array($key, $staticSubs[$key][0],$staticSubs[$key][1],$staticSubs[$key][2]));
 			}
 		}
-				
-		$db->close();
+		else{
+			foreach(array_keys($dynSubs) as $key){
+				if(array_key_exists($key, $staticSubs)){
+					//get min
+					if($dynSubs[$key][0] > $staticSubs[$key][0]){
+						$webLevel = $staticSubs[$key][0];
+					}
+					else{
+						$webLevel = $dynSubs[$key][0];
+					}
+					if($dynSubs[$key][1] > $staticSubs[$key][1]){
+						$emailLevel = $staticSubs[$key][1];
+					}
+					else{
+						$emailLevel = $dynSubs[$key][1];
+					}
+					if($dynSubs[$key][2] > $staticSubs[$key][2]){
+						$txtLevel = $staticSubs[$key][2];
+					}
+					else{
+						$txtLevel = $dynSubs[$key][2];
+					}
+					array_push($this->userIds, array($key, $webLevel,$emailLevel,$txtLevel));
+				}
+				else{
+					array_push($this->userIds, array($key, $staticSubs[$key][0],$staticSubs[$key][1],$staticSubs[$key][2]));
+				}
+			}
+		}
+		$db->close();		
 	}
 
 	public function notify($eventId){
@@ -103,6 +118,7 @@ class Subscription{
 
 			if($email != 4 && $email < $eventSeverity)
 			{
+				echo "Emailing user...";
 				$subject = "SAPIENS Alert";
 				$body = "Warning, \nThere has been an event at ".$eventLocation." for the following reason: ".$eventDesc;
 				$body .= "\nPlease evacuate the building and alert others when it is safe to do so.";
@@ -117,7 +133,7 @@ class Subscription{
 				$body .= "\nPlease evacuate the building and alert others when it is safe to do so.";
 				$headers = "From: admin@sapiens.com\r\n" .
 				    "X-Mailer: php";
-				mail($userCell, $subject, $body, $headers)
+				//mail($userCell, $subject, $body, $headers);
 			}
 		}
 	}
@@ -161,12 +177,17 @@ class Subscription{
 				FALSE  (if not found in array)
 	*/
 	public function check($user){
+		echo "Current user".$user->userId;
+		echo "check: ".count($this->userIds);
 		for($i=0; $i< count($this->userIds); $i++){
-			if(in_array($user->userId, $this->userIds[$i]))
+			echo "ID: ".$this->userIds[$i][0];
+			if(($user->userId == $this->userIds[$i][0]))
 			{
+				echo "Return TRUE";
 				return TRUE;
 			}
 		}
+		echo "Return FALSE";
 		return FALSE;
 	}
 
@@ -180,6 +201,7 @@ class Subscription{
 		for($i=0; $i< count($this->userIds); $i++){
 			if($this->userIds[$i][0] == $user->userId)
 			{
+				echo "In if";
 				array_splice($this->userIds, $i, 1);
 				$db = connectDb();
 				$sql = "DELETE FROM subscriptions WHERE user_id=? AND loc_id=?";
@@ -189,6 +211,7 @@ class Subscription{
 				return TRUE;
 			}
 		}
+		echo "Failed";
 		return FALSE;
 	}	
 }

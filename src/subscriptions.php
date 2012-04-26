@@ -24,6 +24,9 @@
 		if($subscription->check($user)){
 			$unsubResult = $subscription->remove($user);
 		}
+		else{
+			echo "Unsub failed";
+		}
 	}
 	if(isset($_POST['update']))
 	{
