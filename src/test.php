@@ -1,5 +1,10 @@
 <?php
 include("../lib/EventManager.php");
 $rawr = new EventManager(User::resume());
-echo json_encode($rawr->getFullList());
+if($_POST['type'] == 1){
+echo json_encode($rawr->getList());	
+}
+else{
+echo json_encode($rawr->getFullList());	
+}
 ?>

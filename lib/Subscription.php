@@ -150,6 +150,7 @@ class Subscription{
 				$headers = "From: admin@sapiens.com\r\n" .
 				    "X-Mailer: php";
 				mail($userCell, $subject, $body, $headers);
+
 			}
 		}
 	}

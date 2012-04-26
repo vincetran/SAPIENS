@@ -15,11 +15,11 @@ class User{
 	public $username, $userId, $first, $last, $email, $phone, $provider, $lastLogin;
 	private function __construct($user){
 		$db = connectDb();
-		$sql = "SELECT user_id, user_firstname, user_lastname, user_email, user_cell_phone, user_cell_email, user_login_name FROM users WHERE user_login_name=?";
+		$sql = "SELECT user_id, user_firstname, user_lastname, user_email, user_cell_phone, user_cell_email, user_login_name, last_login_ts FROM users WHERE user_login_name=?";
 		$stmt = $db->prepare($sql);
 		$stmt->bind_param('s', $user);
 		$stmt->execute();
-		$stmt->bind_result($this->userId, $this->first, $this->last, $this->email, $this->phone, $this->provider, $this->username);
+		$stmt->bind_result($this->userId, $this->first, $this->last, $this->email, $this->phone, $this->provider, $this->username, $this->lastLogin);
 		$stmt->fetch();
 		$db->close();
 	}

@@ -68,7 +68,19 @@ class EventManager{
 	}
 
 	public function getList(){
-		
+		$objs = array();
+		$time = -1;
+		if($this->user->lastLogin){
+			$time = $this->user->lastLogin;
+		}
+		foreach($this->locations as $loca){
+			$locationObj = array("name"=>$loca->name, "lat"=>$loca->lat, "long"=>$loca->long);
+			$eventObj = $this->getEventsAtLocation($this->user, $loca, $time);
+			$bigObj = array("location"=>$locationObj, "events"=>$eventObj);
+			$objs[] = $bigObj;
+		}
+
+		return $objs;
 	}
 	
 	/*
