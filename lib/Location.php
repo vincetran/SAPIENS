@@ -43,6 +43,16 @@ class Location{
 	public function getId(){
 		return "$this->id";
 	}
+	public function hasChildren(){
+		//Spaghetti this code
+		$children = $this->getChildren();
+		if(sizeof($children) <= 0){
+			return false;
+		}
+		else{
+			return true;
+		}
+	}
 	public function __tostring(){
 		return "$this->name";
 	}

@@ -24,6 +24,7 @@ function severityDropDown($max){
 	}
 }
 function checkInDropDown($location){
+	echo "\t<option value=\"0\">- None Specified -</option>\n";
 	if(!isset($location)){
 		global $ROOT_LOCATION;
 		$location = new Location(getLocationId($ROOT_LOCATION));
@@ -32,8 +33,8 @@ function checkInDropDown($location){
 	}
 	$children = $location->getChildren();
 	
-	for($i=1; $i<sizeof($children); $i++){
-		echo "\t<option value=\"".$i."\">".$i." - ".$children[$i-1]."</option>\n";
+	for($i=1; $i<sizeof($children)+1; $i++){
+		echo "\t<option value=\"".getLocationId($children[$i-1])."\">".$children[$i-1]."</option>\n";
 	}
 }
 function getLocationId($name){

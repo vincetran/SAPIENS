@@ -25,6 +25,17 @@ class User{
 	}
 	public function checkin($location){
 		// TODO: Use the location object to update the backend database with this information.
+		$db = connectDb();
+		$sql = "UPDATE users SET last_loc_checkin_ts=NOW(),last_loc_id=?";
+		$stmt = $db->prepare($sql);
+		$stmt->bind_param('i', $location->id);
+		if(!$stmt->execute()){
+			$db->close();
+			return -1;
+		}else{
+			$db->close();
+			return 1;
+		}
 	}
 	public function sendENS($location){
 		// TODO: Use location to send ENS alert from that (also check if it is possible!)
