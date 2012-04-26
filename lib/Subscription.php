@@ -13,14 +13,69 @@ class Subscription{
 		$this->userIds = array();
 		$this->locationId = $location->id;
 		$db = connectDb();
+		//Dynamic
+		$sql = "SELECT user_id FROM users WHERE last_loc_id IS NOT NULL AND 
+				last_loc_checkin_ts	> DATE_SUB(NOW(), INTERVAL 2 HOUR)";
+		$stmt = $db->prepare($sql);
+		$stmt->execute();
+		$stmt->bind_result($userId);
+		while($stmt->fetch()){
+			array_push($temp1, $userId);
+		}
+		$stmt->close();
+		foreach($temp1 as $userId){
+			$sql = "SELECT user_id, min_severity_web, min_severity_email, min_severity_text FROM dynamic_subscriptions WHERE user_id=?";
+			$stmt = $db->prepare($sql);
+			$stmt->bind_param('i', $userId);
+			$stmt->execute();
+			$stmt->bind_result($userId, $webLevel, $emailLevel, $txtLevel);
+			while($stmt->fetch()){
+				$temp2[$userId] = array($webLevel, $emailLevel, $txtLevel);
+				//array_push($this->userIds, array($userId, $webLevel, $emailLevel, $txtLevel));
+			}
+		}
+		$stmt->close();
+		
+		//Subs
 		$sql = "SELECT user_id, min_severity_web, min_severity_email, min_severity_text FROM subscriptions WHERE loc_id=?";
 		$stmt = $db->prepare($sql);
 		$stmt->bind_param('i', $this->locationId);
 		$stmt->execute();
 		$stmt->bind_result($userId, $webLevel, $emailLevel, $txtLevel);
 		while($stmt->fetch()){
-			array_push($this->userIds, array($userId, $webLevel, $emailLevel, $txtLevel));
+			$temp3[$userId] = array($webLevel, $emailLevel, $txtLevel);
+			//array_push($this->userIds, array($userId, $webLevel, $emailLevel, $txtLevel));
 		}
+		foreach(array_keys($temp2) as $key){
+			if(array_key_exists($key, $temp3)){
+				//get min
+				if($temp2[$key][0] > $temp3[$key][0]){
+					$webLevel = $temp3[$key][0];
+				}
+				else{
+					$webLevel = $temp2[$key][0];
+				}
+				if($temp2[$key][1] > $temp3[$key][1]){
+					$emailLevel = $temp3[$key][1];
+				}
+				else{
+					$emailLevel = $temp2[$key][1];
+				}
+				if($temp2[$key][2] > $temp3[$key][2]){
+					$txtLevel = $temp3[$key][2];
+				}
+				else{
+					$txtLevel = $temp2[$key][2];
+				}
+				array_push($this->userIds, array($key, $webLevel,$emailLevel,$txtLevel));
+			}
+			else{
+				array_push($this->userIds, array($key, $temp3[$key][0],$temp3[$key][1],$temp3[$key][2]));
+			}
+		}
+		
+		
+		
 		$db->close();
 	}
 
