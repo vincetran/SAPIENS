@@ -48,11 +48,6 @@ class Subscription{
 			$stmt->fetch();
 			$stmt->close();
 
-			if($web != 4 && $web < $eventSeverity)
-			{
-				//NOTIFY WEB
-			}
-			echo "Event ".$eventSeverity;
 			if($email != 4 && $email < $eventSeverity)
 			{
 				$subject = "SAPIENS Alert";
