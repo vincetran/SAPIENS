@@ -54,7 +54,14 @@ class EventManager{
 		$db->close();
 		return $eventsArray;
 	}
-
+	private function isLocationInList($id, $locList){
+		foreach($locList as $loc){
+			if($loc->id == $id){
+				return true;
+			}
+		}
+		return false;
+	}
 	public function getFullList(){
 		$objs = array();
 		foreach($this->locations as $loca){

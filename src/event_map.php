@@ -86,9 +86,9 @@ if(!User::resume()){
       }
       return parseInt(currentValue);
     }
-    function getMarkers(url){
+    function getMarkers(text){
       initialize();
-      $.post("test.php", {"type": url}, function(data){
+      $.post("test.php", {"type": text}, function(data){
         for(i = 0; i < data.length; i++){
           if(map[''+data[i].location.lat+''+data[i].location.long]){
             mapCell = map[''+data[i].location.lat+''+data[i].location.long].text
