@@ -39,8 +39,8 @@ if(!User::resume()){
       map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
     }
       
-    function placeMarker(location,color) {
-      var cafeIcon = new google.maps.MarkerImage(color);
+    function placeMarker(location,colorId) {
+      var cafeIcon = new google.maps.MarkerImage(colors[colorId]);
       var marker = new google.maps.Marker({
           position: location, 
           map: map,
@@ -84,28 +84,35 @@ if(!User::resume()){
           currentValue = elem.events[i].severity;
         }
       }
-      return colors[currentValue];
+      return parseInt(currentValue);
+    }
+    function getMarkers(url){
+      initialize();
+      $.post("test.php", {"type": url}, function(data){
+        for(i = 0; i < data.length; i++){
+          if(map[''+data[i].location.lat+''+data[i].location.long]){
+            mapCell = map[''+data[i].location.lat+''+data[i].location.long].text
+            map[''+data[i].location.lat+''+data[i].location.long].text = setText(data[i], mapCell);
+            if(getIcon(data[i]) > map[''+data[i].location.lat+''+data[i].location.long].icon){
+               map[''+data[i].location.lat+''+data[i].location.long].icon = getIcon(data[i])
+            }
+          }
+          else{
+            map[''+data[i].location.lat+''+data[i].location.long] =  {text:setText(data[i], ''), icon:getIcon(data[i])};
+          }
+          placeEvent(data[i], map[''+data[i].location.lat+''+data[i].location.long].text, map[''+data[i].location.lat+''+data[i].location.long].icon);                 
+        }
+      }, 'json')
     }
   $(document).ready(function(){
                 initialize();
-                $.post("test.php", function(data){
-                  console.log(data);
-                  // TODO: Change to another function to make pretty info panes.
-                  for(i = 0; i < data.length; i++){
-                    if(map[''+data[i].location.lat+''+data[i].location.long]){
-                      mapCell = map[''+data[i].location.lat+''+data[i].location.long].text
-                      map[''+data[i].location.lat+''+data[i].location.long].text = setText(data[i], mapCell);
-                      if(getIcon(data[i]) > map[''+data[i].location.lat+''+data[i].location.long].icon){
-                         map[''+data[i].location.lat+''+data[i].location.long].icon = getIcon(data[i])
-                      }
-                    }
-                    else{
-                      map[''+data[i].location.lat+''+data[i].location.long] =  {text:setText(data[i], ''), icon:getIcon(data[i])};
-                    }
-                    placeEvent(data[i], map[''+data[i].location.lat+''+data[i].location.long].text, map[''+data[i].location.lat+''+data[i].location.long].icon);                 
-                  }
-                }, 'json')
-                
+                getMarkers(2);
+                $("#time").click(function(){
+                  getMarkers(1);
+                });
+                $("#all").click(function(){
+                  getMarkers(2);
+                });
        }); 
     </script>
 </head>
@@ -124,6 +131,8 @@ if(!User::resume()){
   </div>
 
     <div id="map_canvas" style="width:100%; height:400px; margin: auto; margin-top: 20px; margin-bottom: 20px; border: 1px solid #CBC9C9;"></div>            
+    <button id="time" value="1">Get Events from Last Login</button>
+    <button id="all" value="2">Get All Events</button>
   </div>                
 </body>
 </html>
