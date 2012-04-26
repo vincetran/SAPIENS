@@ -10,20 +10,21 @@ if(!User::resume()){
 
 <html>
 <head>
-	<link rel="stylesheet" type="text/css" href="../public/css/sapiens.css" />
+	<link rel="stylesheet" type="text/css" href="../public/css/sapiens.css?432" />
 	<link href='http://fonts.googleapis.com/css?family=Chau+Philomene+One' rel='stylesheet' type='text/css'>
 	<link href='http://fonts.googleapis.com/css?family=Chewy' rel='stylesheet' type='text/css'>
    <link href='http://fonts.googleapis.com/css?family=Reenie+Beanie' rel='stylesheet' type='text/css'>
-
+    <link href='http://fonts.googleapis.com/css?family=Audiowide' rel='stylesheet' type='text/css'> 
+<link href='http://fonts.googleapis.com/css?family=Averia+Libre' rel='stylesheet' type='text/css'>
     <title>Map..</title>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
     <script type="text/javascript">
     var map;
     var iconWindows = []
-    var colors = ["http://chart.apis.google.com/chart?chst=d_map_xpin_icon&chld=pin_sleft|glyphish_gear|0069FF",
-    "http://chart.apis.google.com/chart?chst=d_map_xpin_icon&chld=pin_sleft|glyphish_gear|6AFF1A",
-     "http://chart.apis.google.com/chart?chst=d_map_xpin_icon&chld=pin_sleft|glyphish_gear|FFF82F",
+    var colors = ["http://chart.apis.google.com/chart?chst=d_map_xpin_icon&chld=pin_sleft|glyphish_gear|555555",
+    "http://chart.apis.google.com/chart?chst=d_map_xpin_icon&chld=pin_sleft|glyphish_location|6AFF1A",
+     "http://chart.apis.google.com/chart?chst=d_map_xpin_icon&chld=pin_sleft|glyphish_bow-and-arrow|FFF82F",
      "http://chart.apis.google.com/chart?chst=d_map_xpin_icon&chld=pin_sleft|glyphish_zap|FF2823" ];
 
     function initialize() {
@@ -67,10 +68,10 @@ if(!User::resume()){
         setUpInfoPane(fullText, mark);
     }
     function setText(elem, currentText){
-      var text = '<div class="scrollbar-container"><div class="inner">'+elem.location.name+'</div>';
+      var text = '<div class="scrollbarcontainer"><div class="type">'+elem.location.name+'</div>';
       text = currentText + text;
       for(var i = 0; i < elem.events.length; i++){
-        text += ('<div class="data"> Event:'+elem.events[i].description+'</div>');
+        text += ('<div class="data'+ elem.events[i].severity+'">'+elem.events[i].description+'</div>');
       }
       text+= '</div>';
       return text;
@@ -90,14 +91,17 @@ if(!User::resume()){
                   console.log(data);
                   // TODO: Change to another function to make pretty info panes.
                   for(i = 0; i < data.length; i++){
-                    mapCell = map[''+data[i].location.lat+''+data[i].location.long]
-                    if(mapCell){
-                      map[''+data[i].location.lat+''+data[i].location.long] = setText(data[i], mapCell);
+                    if(map[''+data[i].location.lat+''+data[i].location.long]){
+                      mapCell = map[''+data[i].location.lat+''+data[i].location.long].text
+                      map[''+data[i].location.lat+''+data[i].location.long].text = setText(data[i], mapCell);
+                      if(getIcon(data[i]) > map[''+data[i].location.lat+''+data[i].location.long].icon){
+                         map[''+data[i].location.lat+''+data[i].location.long].icon = getIcon(data[i])
+                      }
                     }
                     else{
-                      map[''+data[i].location.lat+''+data[i].location.long] =  setText(data[i], '');
+                      map[''+data[i].location.lat+''+data[i].location.long] =  {text:setText(data[i], ''), icon:getIcon(data[i])};
                     }
-                    placeEvent(data[i], map[''+data[i].location.lat+''+data[i].location.long], getIcon(data[i]));                 
+                    placeEvent(data[i], map[''+data[i].location.lat+''+data[i].location.long].text, map[''+data[i].location.lat+''+data[i].location.long].icon);                 
                   }
                 }, 'json')
                 

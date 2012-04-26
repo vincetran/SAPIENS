@@ -55,11 +55,13 @@ class User{
 			echo "<tr>\n";
 			echo "<td>".$locName."</td>\n<td>".$locDescription."</td>\n<td>".$minWeb.
 			"</td>\n<td>".$minEmail."</td>\n<td>".$minText."</td>\n";
-			echo "<td><input type=\"submit\" name=\"unsub\" value=\"Unsubscribe\">";
+			echo "<td><input type=\"submit\" class=\"butt_input\" name=\"unsub\" value=\"Unsubscribe\">";
 			echo "<input type=\"hidden\" name=\"loc_id\" value=\"".$locId."\">";
 			echo "</tr>";
 			echo "</form>";
 		}
+		$stmt->close();
+		$db->close();
 	}
 	/*
 	///////////////////////////////////////////////////////////////////////////////////////////
@@ -97,7 +99,7 @@ class User{
 			$stmt->fetch();
 			$stmt->close();
 			
-			$sql = "INSERT INTO users(user_firstname, user_lastname, user_login_name, user_login_pass, user_email, user_cell_phone, user_cell_provider, user_cell_email) VALUES(?,?,?,?,?,?,?,?)";
+			$sql = "INSERT INTO users(user_firstname, user_lastname, user_login_name, user_login_pass, user_email, user_cell_phone, user_cell_provider, user_cell_email, current_login_ts) VALUES(?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP)";
 			if($stmt = $db->prepare($sql))
 			{
 				$phone_email = $pnumber.$cpt;
@@ -146,6 +148,25 @@ class User{
 			if($stmt->fetch())
 			{
 				setcookie('ID_SAPIENS', $user, time()+3600);
+				$stmt->close();
+				$sql = "SELECT current_login_ts FROM users WHERE user_login_name=? and user_login_pass=?";
+				$stmt = $db->prepare($sql);
+				$stmt->bind_param('ss', $user, $pass);
+				$stmt->execute();
+				$stmt->bind_result($tempTS);
+				if($stmt->fetch()){
+					$stmt->close();
+					$sql = "UPDATE users set last_login_ts=? WHERE user_login_name=? and user_login_pass=?";
+					$stmt = $db->prepare($sql);
+					$stmt->bind_param('sss', $tempTS, $user, $pass);
+					$stmt->execute();
+				}
+				$stmt->close();
+				$sql = "UPDATE users set current_login_ts=CURRENT_TIMESTAMP WHERE user_login_name=? and user_login_pass=?";
+				$stmt = $db->prepare($sql);
+				$now = time();
+				$stmt->bind_param('ss', $user, $pass);
+				$stmt->execute();
 				$db->close();
 				return new User($user);
 			}
