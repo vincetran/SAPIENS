@@ -22,12 +22,18 @@
 			$stmt->bind_param('sss', $location->id, $severity, $desc);
 			$stmt->execute();
 			$stmt->close();
+
+			$stmt = $db->prepare("SELECT event_id FROM events ORDER BY event_ts DESC");
+			$stmt->execute();
+			$stmt->bind_result($eventId);
+			$stmt->fetch();
+
+			$sub->notify($eventId);
+			$stmt->close();
 			$alertResult = 1;
 		}else{
 			$alertResult = 0;
 		}
-		
-		
 		
 		//echo "Alert from User: $user->username at location: $location->name severity: $severity Description: $desc";	
 	}

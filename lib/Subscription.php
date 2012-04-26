@@ -24,8 +24,54 @@ class Subscription{
 		$db->close();
 	}
 
-	public function notify($num){
-		
+	public function notify($eventId){
+		for($i=0;$i< count($this->userIds); $i++) {
+			$userId = $this->userIds[$i][0];
+			$web = $this->userIds[$i][1];
+			$email = $this->userIds[$i][2];
+			$text = $this->userIds[$i][3];
+
+			$db = connectDb();
+			$sql = "SELECT event_severity, loc_description, event_description FROM events NATURAL JOIN locations WHERE event_id=?";
+			$stmt = $db->prepare($sql);
+			$stmt->bind_param('i', $eventId);
+			$stmt->execute();
+			$stmt->bind_result($eventSeverity, $eventLocation, $eventDesc);
+			$stmt->fetch();
+			$stmt->close();
+
+			$sql = "SELECT user_email, user_cell_email FROM users WHERE user_id=?";
+			$stmt = $db->prepare($sql);
+			$stmt->bind_param('i', $userId);
+			$stmt->execute();
+			$stmt->bind_result($userEmail, $userCell);
+			$stmt->fetch();
+			$stmt->close();
+
+			if($web != 4 && $web < $eventSeverity)
+			{
+				//NOTIFY WEB
+			}
+			echo "Event ".$eventSeverity;
+			if($email != 4 && $email < $eventSeverity)
+			{
+				$subject = "SAPIENS Alert";
+				$body = "Warning, \nThere has been an event at ".$eventLocation." for the following reason: ".$eventDesc;
+				$body .= "\nPlease evacuate the building and alert others when it is safe to do so.";
+				$headers = "From: admin@sapiens.com\r\n" .
+				    "X-Mailer: php";
+				mail($userEmail, $subject, $body, $headers);			
+			}
+			if($text != 4 && $text < $eventSeverity)
+			{
+				$subject = "SAPIENS Alert";
+				$body = "Warning, \nThere has been an event at ".$eventLocation." for the following reason: ".$eventDesc;
+				$body .= "\nPlease evacuate the building and alert others when it is safe to do so.";
+				$headers = "From: admin@sapiens.com\r\n" .
+				    "X-Mailer: php";
+				mail($userCell, $subject, $body, $headers)
+			}
+		}
 	}
 
 	/*

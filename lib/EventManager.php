@@ -27,7 +27,6 @@ class EventManager{
 		}
 		$db->close();
 	}
-
 	private function getEventsAtLocation($user, $location, $time = -1, $isDynamic = false){
 		$eventsArray = array();
 		$sql = "";
@@ -54,20 +53,18 @@ class EventManager{
 		}
 		$db->close();
 		return $eventsArray;
-
 	}
 
 	public function getFullList(){
-			$objs = array();
-			foreach($this->locations as $loca){
-				$locationObj = array("name"=>$loca->name, "lat"=>$loca->lat, "long"=>$loca->long);
-				$eventObj = $this->getEventsAtLocation($this->user, $loca);
-				$bigObj = array("location"=>$locationObj, "events"=>$eventObj);
-				$objs[] = $bigObj;
-			}
+		$objs = array();
+		foreach($this->locations as $loca){
+			$locationObj = array("name"=>$loca->name, "lat"=>$loca->lat, "long"=>$loca->long);
+			$eventObj = $this->getEventsAtLocation($this->user, $loca);
+			$bigObj = array("location"=>$locationObj, "events"=>$eventObj);
+			$objs[] = $bigObj;
+		}
 
-			return $objs;
-			
+		return $objs;
 	}
 
 	public function getList(){
@@ -124,7 +121,6 @@ class EventManager{
 			$db->close();
 			return -1;
 		}
-	}
-	
+	}	
 }
 ?>
