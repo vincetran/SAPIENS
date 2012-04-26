@@ -14,13 +14,34 @@ function getCPSDropDown(){
 		echo "\t<option value=\"".$cp_id."\">".$cp_name."</option>\n";
 	}
 }
-function severityDropDown($max){
-	if(!isset($max)){
-		$max = 5;
+/* 
+	There are 3 different options
+	Option 0: $input is null and is used for subscription addition
+	Option 1: $input has the value that the dropdown should default to
+	Option 2: $input is the max value. Used for Adding an event without a level of 4
+*/
+function severityDropDown($option, $input){
+	if(!isset($input)){
+		$input = 5;
 	}
-	$array = array('Non Critical', 'Critical', 'Very Critical', 'Not Applicable');
-	for($i=1; $i<$max; $i++){
-		echo "\t<option value=\"".$i."\">".$i." - ".$array[$i-1]."</option>\n";
+	if($option==0 || $option==2)
+	{
+		$array = array('Non Critical', 'Critical', 'Very Critical', 'Not Applicable');
+		for($i=1; $i<$input; $i++){
+			echo "\t<option value=\"".$i."\">".$i." - ".$array[$i-1]."</option>\n";
+		}
+	}
+	elseif($option==1)
+	{
+		$array = array('Non Critical', 'Critical', 'Very Critical', 'Not Applicable');
+		for($i=1; $i<5; $i++){
+			if($i == $input){
+				echo "\t<option value=\"".$i."\" selected=\"selected\">".$i." - ".$array[$i-1]."</option>\n";
+			}
+			else{
+				echo "\t<option value=\"".$i."\">".$i." - ".$array[$i-1]."</option>\n";
+			}
+		}
 	}
 }
 function checkInDropDown($location){

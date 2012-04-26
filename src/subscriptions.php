@@ -31,6 +31,7 @@
 		$user->updateDynamic($_POST['pref_web'], $_POST['pref_email'], $_POST['pref_txt']);
 		$updateResult=TRUE;
 	}
+	$dynamicPrefs = $user->getDynamic();
 ?>
 <!DOCTYPE html>
 <html >
@@ -147,21 +148,21 @@
 			<div class="severe">
 			<label for="severity_web">Web</label></br>
 			<select name="pref_web">
-				<?php severityDropDown(); ?>
+				<?php severityDropDown(1, $dynamicPrefs[0]); ?>
 			</select>
 			</div>
 
 			<div class="severe">
 			<label for="severity_email">Email</label></br>
 			<select name="pref_email">
-				<?php severityDropDown(); ?>
+				<?php severityDropDown(1, $dynamicPrefs[1]); ?>
 			</select>
 			</div>
 
 			<div class="severe">
 			<label for="severity_txt">Text</label></br>
 			<select name="pref_txt">
-				<?php severityDropDown(); ?>
+				<?php severityDropDown(1, $dynamicPrefs[2]); ?>
 			</select>
 			</div>
 
@@ -178,21 +179,21 @@
 			<div class="severe">
 			<label for="severity_web">Web</label></br>
 			<select name="severity_web">
-				<?php severityDropDown(); ?>
+				<?php severityDropDown(0); ?>
 			</select>
 			</div>
 
 			<div class="severe">
 			<label for="severity_email">Email</label></br>
 			<select name="severity_email">
-				<?php severityDropDown(); ?>
+				<?php severityDropDown(0); ?>
 			</select>
 			</div>
 
 			<div class="severe">
 			<label for="severity_txt">Text</label></br>
 			<select name="severity_txt">
-				<?php severityDropDown(); ?>
+				<?php severityDropDown(0); ?>
 			</select>
 			</div>
 			

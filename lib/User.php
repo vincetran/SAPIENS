@@ -72,6 +72,20 @@ class User{
 		$stmt->close();
 		$db->close();
 	}
+	public function getDynamic(){
+		$db = connectDb();
+		$sql = "SELECT min_severity_web, min_severity_email, min_severity_text FROM dynamic_subscriptions WHERE user_id=?";
+		$stmt = $db->prepare($sql);
+		$stmt->bind_param('i', $this->userId);
+		$stmt->execute();
+		$stmt->bind_result($minWeb, $minEmail, $minText);
+		$stmt->fetch();
+		$stmt->close();
+		$db->close();
+		$arr = array();
+		array_push($arr, $minWeb, $minEmail, $minText);
+		return $arr;
+	}
 	/*
 	///////////////////////////////////////////////////////////////////////////////////////////
 	BELOW THIS LINE IS WAYS TO CREATE THE USER OBJECT~~~~~~~~~~~~~~~~~~~~~~~
