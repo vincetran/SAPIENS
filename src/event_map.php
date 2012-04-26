@@ -22,10 +22,10 @@ if(!User::resume()){
     <script type="text/javascript">
     var map;
     var iconWindows = []
-    var colors = ["http://chart.apis.google.com/chart?chst=d_map_xpin_icon&chld=pin_sleft|glyphish_gear|555555",
-    "http://chart.apis.google.com/chart?chst=d_map_xpin_icon&chld=pin_sleft|glyphish_location|6AFF1A",
-     "http://chart.apis.google.com/chart?chst=d_map_xpin_icon&chld=pin_sleft|glyphish_bow-and-arrow|FFF82F",
-     "http://chart.apis.google.com/chart?chst=d_map_xpin_icon&chld=pin_sleft|glyphish_zap|FF2823" ];
+    var colors = ["http://chart.apis.google.com/chart?chst=d_map_xpin_icon&chld=pin|glyphish_gear|555555",
+    "http://chart.apis.google.com/chart?chst=d_map_xpin_icon&chld=pin|glyphish_location|6AFF1A",
+     "http://chart.apis.google.com/chart?chst=d_map_xpin_icon&chld=pin|glyphish_bow-and-arrow|FFF82F",
+     "http://chart.apis.google.com/chart?chst=d_map_xpin_icon&chld=pin|glyphish_zap|FF2823" ];
 
     function initialize() {
       var iconWindows = []
@@ -44,8 +44,9 @@ if(!User::resume()){
       var marker = new google.maps.Marker({
           position: location, 
           map: map,
-          icon: cafeIcon
+          icon: cafeIcon,
       });
+
       map.setCenter(location);
       return marker;
     }
