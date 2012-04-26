@@ -69,6 +69,11 @@ input{
 }
 .butt_input{
     cursor: pointer;
+    color:black;
+    -webkit-transition: color .5s;
+}
+.butt_input:hover{
+    color:#02D000;
 }
 .sub{
     padding: 20px;
