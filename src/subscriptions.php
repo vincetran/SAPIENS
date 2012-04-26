@@ -25,6 +25,12 @@
 			$unsubResult = $subscription->remove($user);
 		}
 	}
+	if(isset($_POST['update']))
+	{
+		$user = User::resume();
+		$user->updateDynamic($_POST['pref_web'], $_POST['pref_email'], $_POST['pref_txt']);
+		$updateResult=TRUE;
+	}
 ?>
 <!DOCTYPE html>
 <html >
@@ -81,6 +87,10 @@
 		$('#toggle').click(function() {
 			$('#currsub').toggle('slow');
 		});
+
+		$('#toggle1').click(function() {
+			$('#preferences').toggle('slow');
+		});
 	});
 </script>
 </head>
@@ -108,8 +118,10 @@
 				echo "</br><div class=\"error\">You're already subscribed to that location</div>";}
 			elseif(isset($unsubResult) && $unsubResult){
 				echo "</br><div class=\"success\">Successfully unsubscribed</div>";}
-				elseif(isset($unsubResult) && !$unsubResult){
+			elseif(isset($unsubResult) && !$unsubResult){
 				echo "</br><div class=\"error\">Failed trying to unsubscribe</div>";}
+			elseif(isset($updateResult) && $updateResult){
+				echo "</br><div class=\"success\">Successfully Updated Preferences</div>";}
 		?>
 		<h1>Current Subscriptions</h1>
 		<div id="toggle"><a>(hide/show)</a></div>
@@ -125,6 +137,36 @@
 				</tr>
 			<?php $user->getSubs(); ?>
 			</table>
+		</div>
+		<h1>Check-in Preferences</h1>
+		<div id="toggle1"><a>(hide/show)</a></div>
+		<div id="preferences">
+			<form action="subscriptions.php" method="post">
+			<label for="severity">Severity Levels</label></br></br>
+
+			<div class="severe">
+			<label for="severity_web">Web</label></br>
+			<select name="pref_web">
+				<?php severityDropDown(); ?>
+			</select>
+			</div>
+
+			<div class="severe">
+			<label for="severity_email">Email</label></br>
+			<select name="pref_email">
+				<?php severityDropDown(); ?>
+			</select>
+			</div>
+
+			<div class="severe">
+			<label for="severity_txt">Text</label></br>
+			<select name="pref_txt">
+				<?php severityDropDown(); ?>
+			</select>
+			</div>
+
+			</br></br><input type="submit" class="butt_input" name="update" value="Update Preferences">
+			</form>
 		</div>
 		<h1>Add a Subscription</h1>
 		<form action="subscriptions.php" method="post">
