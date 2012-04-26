@@ -149,7 +149,7 @@ class Subscription{
 				$body .= "\nPlease evacuate the building and alert others when it is safe to do so.";
 				$headers = "From: admin@sapiens.com\r\n" .
 				    "X-Mailer: php";
-				//mail($userCell, $subject, $body, $headers);
+				mail($userCell, $subject, $body, $headers);
 			}
 		}
 	}
