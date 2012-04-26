@@ -63,6 +63,15 @@ class User{
 		$stmt->close();
 		$db->close();
 	}
+	public function updateDynamic($webLevel, $emailLevel, $txtLevel){
+		$db = connectDb();
+		$sql = "UPDATE dynamic_subscriptions SET min_severity_web=?, min_severity_email=?, min_severity_text=? WHERE user_id=?";
+		$stmt = $db->prepare($sql);
+		$stmt->bind_param('iiii', $webLevel, $emailLevel, $txtLevel, $this->userId);
+		$stmt->execute();
+		$stmt->close();
+		$db->close();
+	}
 	/*
 	///////////////////////////////////////////////////////////////////////////////////////////
 	BELOW THIS LINE IS WAYS TO CREATE THE USER OBJECT~~~~~~~~~~~~~~~~~~~~~~~
@@ -105,8 +114,21 @@ class User{
 				$phone_email = $pnumber.$cpt;
 				$stmt->bind_param('ssssssis', $fname, $lname, $user, $pass, $email, $pnumber, $cps, $phone_email);
 				$stmt->execute();
-				$db->close();
+				$stmt->close();
 				setcookie('ID_SAPIENS', $user, time()+3600);
+				$sql = "SELECT user_id FROM users WHERE user_login_name=? AND user_login_pass=?";
+				$stmt = $db->prepare($sql);
+				$stmt->bind_param('ss', $user, $pass);
+				$stmt->execute();
+				$stmt->bind_result($userId);
+				$stmt->fetch();
+				$stmt->close();
+				$sql = "INSERT INTO dynamic_subscriptions(user_id) VALUES(?)";
+				$stmt = $db->prepare($sql);
+				$stmt->bind_param('i', $userId);
+				$stmt->execute();
+				$stmt->close();
+				$db->close();
 				return new User($user);
 			}
 			else
