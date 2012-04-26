@@ -26,10 +26,12 @@ class Subscription{
 		$stmt->bind_result($userId);
 		while($stmt->fetch()){
 			array_push($dynamicIds, $userId);
+			//echo "Push to Dynamic: ".$userId;
 		}
 		$stmt->close();
 
-		foreach($dynamicIds as $userId){
+		foreach($dynamicIds as $userIdFound){
+			//echo "in foreach</br>";
 			$sql = "SELECT user_id, min_severity_web, min_severity_email, min_severity_text 
 			FROM dynamic_subscriptions WHERE user_id=?";
 			$stmt = $db->prepare($sql);
@@ -38,6 +40,7 @@ class Subscription{
 			$stmt->bind_result($userIdFound, $webLevel, $emailLevel, $txtLevel);
 			while($stmt->fetch()){
 				$dynSubs[$userIdFound] = array($webLevel, $emailLevel, $txtLevel);
+				//echo "dynamic ".$userIdFound;
 			}
 			$stmt->close();
 		}
@@ -51,7 +54,7 @@ class Subscription{
 		$stmt->bind_result($userId2, $webLevel, $emailLevel, $txtLevel);
 		while($stmt->fetch()){
 			$staticSubs[$userId2] = array($webLevel, $emailLevel, $txtLevel);
-			echo "Static ".$userId2;
+			//echo "<br/>Static UID = $userId2 WL = $webLevel EL = $emailLevel TL = $txtLevel<br/>";
 		}
 
 		if(count($dynSubs) == 0)
@@ -83,10 +86,16 @@ class Subscription{
 						$txtLevel = $dynSubs[$key][2];
 					}
 					array_push($this->userIds, array($key, $webLevel,$emailLevel,$txtLevel));
+					unset($staticSubs[$key]);
 				}
 				else{
-					array_push($this->userIds, array($key, $staticSubs[$key][0],$staticSubs[$key][1],$staticSubs[$key][2]));
+					//echo "<br/>dynamic subs = sizeof($dynSubs[$key]) where key is $key</br>";
+					array_push($this->userIds, array($key, $dynSubs[$key][0],$dynSubs[$key][1],$dynSubs[$key][2]));
 				}
+			}
+			foreach(array_keys($staticSubs) as $key){
+				//echo "In foreach Static, Key: ".$key;
+				array_push($this->userIds, array($key, $staticSubs[$key][0],$staticSubs[$key][1],$staticSubs[$key][2]));
 			}
 		}
 		$db->close();		
@@ -99,14 +108,18 @@ class Subscription{
 			$email = $this->userIds[$i][2];
 			$text = $this->userIds[$i][3];
 
+			//echo "<br/><br/>Notify: UID = $userId web = $web email = $email text = $text<br/>";
+
 			$db = connectDb();
-			$sql = "SELECT event_severity, loc_description, event_description FROM events NATURAL JOIN locations WHERE event_id=?";
+			$sql = "SELECT event_severity, loc_description, event_description FROM events NATURAL JOIN locations WHERE 	event_id=?";
 			$stmt = $db->prepare($sql);
 			$stmt->bind_param('i', $eventId);
 			$stmt->execute();
 			$stmt->bind_result($eventSeverity, $eventLocation, $eventDesc);
 			$stmt->fetch();
 			$stmt->close();
+
+			//echo "<br/>After first Db Connect: ES = $eventSeverity EL = $eventLocation ED = $eventDesc<br/>";
 
 			$sql = "SELECT user_email, user_cell_email FROM users WHERE user_id=?";
 			$stmt = $db->prepare($sql);
@@ -116,9 +129,12 @@ class Subscription{
 			$stmt->fetch();
 			$stmt->close();
 
-			if($email != 4 && $email < $eventSeverity)
+			//echo "<br/>After second DB connect UE = $userEmail UC = $userCell<br/>";
+
+			//echo "If (($email != 4) && ($email <= $eventSeverity))";
+			if(($email != 4) && ($email <= $eventSeverity))
 			{
-				echo "Emailing user...";
+				//echo "Emailing user...";
 				$subject = "SAPIENS Alert";
 				$body = "Warning, \nThere has been an event at ".$eventLocation." for the following reason: ".$eventDesc;
 				$body .= "\nPlease evacuate the building and alert others when it is safe to do so.";
@@ -126,7 +142,7 @@ class Subscription{
 				    "X-Mailer: php";
 				mail($userEmail, $subject, $body, $headers);			
 			}
-			if($text != 4 && $text < $eventSeverity)
+			if(($text != 4) && ($text <= $eventSeverity))
 			{
 				$subject = "SAPIENS Alert";
 				$body = "Warning, \nThere has been an event at ".$eventLocation." for the following reason: ".$eventDesc;
@@ -177,17 +193,17 @@ class Subscription{
 				FALSE  (if not found in array)
 	*/
 	public function check($user){
-		echo "Current user".$user->userId;
-		echo "check: ".count($this->userIds);
+		//echo "Current user".$user->userId;
+		//echo "</br>Number of users: ".count($this->userIds);
 		for($i=0; $i< count($this->userIds); $i++){
-			echo "ID: ".$this->userIds[$i][0];
+			//echo "ID: ".$this->userIds[$i][0];
 			if(($user->userId == $this->userIds[$i][0]))
 			{
-				echo "Return TRUE";
+				//echo "Return TRUE";
 				return TRUE;
 			}
 		}
-		echo "Return FALSE";
+		//echo "Return FALSE";
 		return FALSE;
 	}
 
@@ -201,7 +217,7 @@ class Subscription{
 		for($i=0; $i< count($this->userIds); $i++){
 			if($this->userIds[$i][0] == $user->userId)
 			{
-				echo "In if";
+				//echo "In if";
 				array_splice($this->userIds, $i, 1);
 				$db = connectDb();
 				$sql = "DELETE FROM subscriptions WHERE user_id=? AND loc_id=?";
@@ -211,7 +227,7 @@ class Subscription{
 				return TRUE;
 			}
 		}
-		echo "Failed";
+		//echo "Failed";
 		return FALSE;
 	}	
 }
