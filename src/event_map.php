@@ -107,10 +107,12 @@ if(!User::resume()){
   $(document).ready(function(){
                 initialize();
                 getMarkers(2);
-                $("#time").click(function(){
+                $("#time").click(function(event){
+                  event.preventDefault();
                   getMarkers(1);
                 });
-                $("#all").click(function(){
+                $("#all").click(function(event){
+                  event.preventDefault();
                   getMarkers(2);
                 });
        }); 
@@ -129,10 +131,13 @@ if(!User::resume()){
     <a href="new_event.php">Submit a New Event</a>
     <a href="logout.php">Logout</a>
   </div>
+  <div id="navbar2">
+    <a id="time" href="1">All Events</a>
+    <a id="all" href="2">Events Since Last Login</a>
+</div>
 
     <div id="map_canvas" style="width:100%; height:400px; margin: auto; margin-top: 20px; margin-bottom: 20px; border: 1px solid #CBC9C9;"></div>            
-    <button id="time" value="1">Get Events from Last Login</button>
-    <button id="all" value="2">Get All Events</button>
+
   </div>                
 </body>
 </html>

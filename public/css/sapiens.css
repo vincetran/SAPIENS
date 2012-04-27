@@ -7,12 +7,31 @@
 }
 #box{
     width: 700px;
-    height: 500px;
+    height: 475px;
     text-align:center;
     margin: auto;
     overflow-x: hidden;
     overflow-y: scroll;
     border: 1px solid black;
+}
+#navbar2{
+    padding:8px;
+    margin-bottom: 5px;
+    background-color: #BCFBA9;
+    border-bottom:1px solid #656565;
+}
+#navbar2 a{
+    background-color:#E3E3E3;
+    border: 1px solid #8C8C8C;
+    padding:5px;
+    color: #505050;
+    margin: 20px;
+    border-radius: 5px;
+    font-size: 12px;
+}
+#navbar2 a:hover{
+    color: #2F2F2F;
+
 }
 a{
     text-decoration:none;

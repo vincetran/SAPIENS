@@ -7,19 +7,23 @@ if(!$user){
 }
 else{
 	$event = new EventManager($user);
+	$list = 0;
 	if(!$_GET || !$_GET['type'] || $_GET['type'] == 1){
 		$list = $event->getFullList();
-		$info .="<div id='box'>";
-		foreach($list as $item){
-			$info .= "<div class='location'>";
-			$info .= "<h2>" . $item["location"]["name"] . "</h2>";
-			foreach($item["events"] as $event){
-				$info .= "<div class='data". $event['severity']."'>" . $event['description'] . "</div>";
-			}
-			$info .= "</div>";
+	}
+	else{
+		$list = $event->getList();
+	}
+	$info .="<div id='box'>";
+	foreach($list as $item){
+		$info .= "<div class='location'>";
+		$info .= "<h2>" . $item["location"]["name"] . "</h2>";
+		foreach($item["events"] as $event){
+			$info .= "<div class='data". $event['severity']."'>" . $event['description'] . "</div>";
 		}
 		$info .= "</div>";
 	}
+	$info .= "</div>";
 }
 ?>
 <!DOCTYPE html>
@@ -44,6 +48,11 @@ else{
 	<a href="checkin.php">Check In</a>
 	<a href="new_event.php">Submit a New Event</a>
 	<a href="logout.php">Logout</a>
+</div>
+<div id="navbar2">
+	<a href="event_list.php">All Events</a>
+	<a href="event_list.php?type=2">Events Since Last Login</a>
+
 </div>
 <?php
 	echo $info;
